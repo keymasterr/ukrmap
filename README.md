@@ -696,3 +696,7 @@ ukrmap/
 `dist/ua-wgs84.geo.json` is the same geometry in lon/lat, simplified identically, for anyone bringing their own projection.
 
 Known gaps: no per-district (raion) geometry, by design; the `region` label set is not offset-tuned the way `city` is, so `labels=both` collides in the crowded west; and the grid's gap is uniform between bounding *boxes*, which cannot make the gap between *shapes* uniform — tune `gapX`/`gapY` to taste.
+
+---
+
+MIT, and the geometry is derived from [Natural Earth](https://www.naturalearthdata.com/), which is in the public domain. The regions' names, areas and populations are facts, not authorship. See [LICENSE](LICENSE).
