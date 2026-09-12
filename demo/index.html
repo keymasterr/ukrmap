@@ -56,7 +56,7 @@ th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
 /* ── page-level language switch ───────────────────────────────────────── */
 .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; }
 .top-right { flex: none; padding-top: .7rem; display: flex; flex-direction: column;
-             align-items: flex-end; gap: .3rem; }
+             align-items: flex-end; gap: 2rem; }
 #lang { display: flex; gap: .7rem; font-size: .95rem; }
 .src { font-size: .95rem; font-variant: small-caps; letter-spacing: .07em; color: #6a6558; }
 .src:hover { color: #a5402f; }
@@ -189,7 +189,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         border-left: 2px solid #e2ddcd; }
   pre, table { width: 100%; }
   .top { flex-direction: column; gap: .6rem; }
-  .top-right { flex-direction: row; align-items: baseline; gap: 1.4rem; padding-top: 0; }
+  .top-right { flex-direction: row; align-items: baseline; gap: 2rem; padding-top: 0; }
 }
 </style>
 </head>
@@ -340,9 +340,10 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '&lt;/script&gt;',
       mnOrder: '<b>Чому розкладений вигляд зберігає порядок 2012 року.</b> Регіони розлітаються трьома смугами із заходу на схід. Якщо поміряти весь перехід, це єдиний порядок, у якому перекриття регіонів монотонно спадає до нуля: за алфавітом воно піднімається приблизно до 95% площі плитки, за населенням — до 123%, тобто регіони лягають утроє. Саму сітку ніхто не обчислює: браузер розкладає прямокутники, а компонент зчитує позиції — точно як у версії 2012 року.',
       h2data: 'Як улаштовані дані',
-      pdata: 'По одному файлу на рівень деталізації. Це топологія, а не набір полігонів: кожна дуга зберігається один раз, а регіон — це список індексів дуг. Внутрішні межі й державний кордон окремо не зберігаються: їх виводять із того, скільком регіонам належить кожна дуга. Тому й Київ, коли його виділити окремо, отримує правильну межу. Точка спрощення дорівнює пікселю саме на тій ширині, що в таблиці; на екрані 2× поділіть її навпіл.',
-      thDetail: 'деталізація', thPoints: 'точок', thFile: 'файл', thUse: 'чітко до ширини',
-      usesPrint: '1900 px', usesDefault: '950 px — за замовчуванням', usesSmall: '470 px',
+      pdata: 'По одному файлу на рівень деталізації. Це топологія, а не набір полігонів: кожна дуга зберігається один раз, а регіон — це список індексів дуг. Внутрішні межі й державний кордон окремо не зберігаються: їх виводять із того, скільком регіонам належить кожна дуга. Тому й Київ, коли його виділити окремо, отримує правильну межу. Рівень деталізації — це крок спрощення в метрах, і він дорівнює одному пікселю при ширині 1900, 950 і 470 px відповідно: дрібніші вигини не розмиваються, їх просто немає. На екрані 2× поділіть ширину навпіл.',
+      thDetail: 'деталізація', thPoints: 'точок', thFile: 'файл', thUse: 'коли використовувати',
+      usesPrint: 'друк і великі розміри', usesDefault: 'за замовчуванням',
+      usesSmall: 'якщо мапа не ширша за 470 px',
       pcarries: 'Кожен регіон також містить назву українською та англійською, площу, населення, центр із координатами в проєкції та габарити для сітки.',
       h2notes: 'Примітки',
       notes: [
@@ -482,9 +483,10 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '&lt;/script&gt;',
       mnOrder: '<b>Why the unfolded view keeps its 2012 order.</b> The regions fly out in three west-to-east bands. It’s the only order in which region overlap falls monotonically to zero over the whole transition. Sorted alphabetically, overlap peaks at about 95% of a tile’s area; sorted by population, at 123%, which means regions stacked three deep. The component doesn’t compute the grid: the browser lays out the boxes and the component reads their positions back, as the 2012 version did.',
       h2data: 'What’s in the data',
-      pdata: 'One file per detail level. It’s a topology, not a set of polygons: every arc is stored once and each region is a list of arc indices. Internal borders and the national outline aren’t stored as separate lines; they’re derived from how many regions use each arc. That’s also why Kyiv City gets the right boundary when you split it out. The simplification interval is one pixel at the width in the table; halve it on a 2× screen.',
-      thDetail: 'detail', thPoints: 'points', thFile: 'file', thUse: 'crisp up to',
-      usesPrint: '1900 px', usesDefault: '950 px — the default', usesSmall: '470 px',
+      pdata: 'One file per detail level. It’s a topology, not a set of polygons: every arc is stored once and each region is a list of arc indices. Internal borders and the national outline aren’t stored as separate lines; they’re derived from how many regions use each arc. That’s also why Kyiv City gets the right boundary when you split it out. A detail level is a simplification interval in meters, and it measures one pixel at 1900, 950 and 470 px wide respectively: finer bends are not blurred, they are simply not there. Halve the width on a 2× screen.',
+      thDetail: 'detail', thPoints: 'points', thFile: 'file', thUse: 'when to use it',
+      usesPrint: 'print and large sizes', usesDefault: 'the default',
+      usesSmall: 'if the map is no wider than 470 px',
       pcarries: 'Each region also carries its name in Ukrainian and English, its area and population, its administrative center with projected coordinates, and the bounding box the unfolded layout needs.',
       h2notes: 'Notes',
       notes: [
