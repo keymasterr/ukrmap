@@ -2,6 +2,8 @@
 
 A small, fast SVG map of Ukraine's 25 regions, for websites, press and statistical reports.
 
+**[Demo, and the files to download](https://keymasterr.com/micro/ukrmap/)** — the same page also works as the manual.
+
 **The static file is the product.** Every region carries its ISO 3166-2 code and a `<title>`, so hover on real region edges, native tooltips and choropleth coloring all work from a stylesheet — with no JavaScript on the page. The component is optional, and only for what CSS cannot do.
 
 **Nothing to generate.** Grab a file from [`dist/`](dist/):

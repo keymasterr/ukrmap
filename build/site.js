@@ -8,7 +8,9 @@
  * The demo is written to be opened from disk, so it reaches sideways for the
  * files it offers: ../dist/. That path does not survive being served from a
  * URL, so it is rewritten here rather than in the page — the page keeps
- * working from disk, which is how it is developed.
+ * working from disk, which is how it is developed. The 2012 page is linked by
+ * its address on the site instead, so that link holds wherever the page is
+ * opened: from a clone, from disk, or from the site itself.
  *
  *   site/
  *     index.html        the demo
@@ -57,9 +59,7 @@ fs.mkdirSync(SITE, { recursive: true });
 /* --- the demo, with its sideways links brought inside ------------------- */
 need(path.join(HERE, 'demo', 'data.js'), 'demo/data.js — run `npm run build`');
 let page = fs.readFileSync(path.join(HERE, 'demo', 'index.html'), 'utf8');
-page = page
-  .split('../../page-2012/index.html').join('2012/')
-  .split('../dist/').join('files/');
+page = page.split('../dist/').join('files/');
 fs.writeFileSync(path.join(SITE, 'index.html'), page);
 
 for (const f of ['ukrmap.js', 'ukrmap-unfold.js', 'data.js', 'facts.js', 'sizes.js']) {

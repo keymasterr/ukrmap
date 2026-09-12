@@ -4,7 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ukrmap · невелика мапа України</title>
-<meta name="description" content="Невелика швидка мапа регіонів України: SVG-файл на 13 КБ, ISO 3166-2, наведення по справжніх межах і розфарбування за даними з одного правила CSS.">
+<meta name="description" content="Мапа регіонів України: файл зображення, а не бібліотека. Наведення по справжніх межах областей, системні підказки, колір за даними з одного правила CSS, коди ISO 3166-2.">
+<link rel="canonical" href="https://keymasterr.com/micro/ukrmap/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://keymasterr.com/micro/ukrmap/">
+<meta property="og:title" content="ukrmap · мапа регіонів України">
+<meta property="og:description" content="Файл зображення, а не бібліотека: наведення по справжніх межах областей, системні підказки, колір за даними з одного правила CSS.">
+<meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Condensed&display=swap" rel="stylesheet">
 <style>
@@ -26,7 +32,7 @@ li { margin-bottom: .35rem; }
 a { color: inherit; text-decoration: none; border-bottom: 1px solid #b9b3a2; }
 a:hover { border-bottom-color: #a5402f; color: #a5402f; }
 hr { border: 0; border-top: 1px solid #e2ddcd; margin: 3rem 0; }
-em.lead { font-style: italic; color: #4a463c; }
+.colophon { font-size: .92rem; line-height: 1.5; color: #6a6558; margin-top: 1.6rem; }
 
 /* Tufte's margin notes: the aside sits in the gutter, not in the flow. */
 .mn {
@@ -49,7 +55,11 @@ th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
 
 /* ── page-level language switch ───────────────────────────────────────── */
 .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem; }
-#lang { display: flex; gap: .7rem; font-size: .95rem; flex: none; padding-top: .7rem; }
+.top-right { flex: none; padding-top: .7rem; display: flex; flex-direction: column;
+             align-items: flex-end; gap: .3rem; }
+#lang { display: flex; gap: .7rem; font-size: .95rem; }
+.src { font-size: .95rem; font-variant: small-caps; letter-spacing: .07em; color: #6a6558; }
+.src:hover { color: #a5402f; }
 #lang button, .control button {
   appearance: none; border: 0; background: none; padding: 0 0 1px; cursor: pointer;
   font: inherit; color: #6a6558; border-bottom: 1px solid transparent;
@@ -179,6 +189,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         border-left: 2px solid #e2ddcd; }
   pre, table { width: 100%; }
   .top { flex-direction: column; gap: .6rem; }
+  .top-right { flex-direction: row; align-items: baseline; gap: 1.4rem; padding-top: 0; }
 }
 </style>
 </head>
@@ -186,7 +197,10 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
 
 <div class="top">
   <h1>ukrmap <small data-t="sub"></small></h1>
-  <div id="lang" role="group" aria-label="Language"></div>
+  <div class="top-right">
+    <div id="lang" role="group" aria-label="Language"></div>
+    <a class="src" href="https://github.com/keymasterr/ukrmap">GitHub</a>
+  </div>
 </div>
 
 <p data-t="lead"></p>
@@ -270,6 +284,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
 
 <hr>
 <p style="font-size:.92rem;color:#6a6558" data-t="footer"></p>
+<p class="colophon" data-t="copyright"></p>
 
 <script src="ukrmap.js"></script>
 <script src="ukrmap-unfold.js"></script>
@@ -282,13 +297,13 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
   var TEXT = {
     uk: {
       docTitle: 'ukrmap · невелика мапа України',
-      meta: 'Невелика швидка мапа регіонів України: SVG-файл на 13 КБ, ISO 3166-2, наведення по справжніх межах і розфарбування за даними з одного правила CSS.',
-      sub: 'Невелика швидка мапа регіонів України — для сайтів, преси та статистичних звітів.',
-      lead: '<em class="lead">Двадцять п’ять регіонів, {geo} КБ геометрії і жодного рядка JavaScript.</em> '
-        + 'Це звичайний SVG-файл: курсор реагує на справжню форму регіону, а не на прямокутник, підказки системні, колір задає одне правило CSS.',
+      meta: 'Мапа регіонів України: файл зображення, а не бібліотека. Наведення по справжніх межах областей, системні підказки, колір за даними з одного правила CSS, коди ISO 3166-2.',
+      sub: 'Мапа регіонів України для сайтів, преси та статистичних звітів',
+      lead: 'Це файл зображення, а не бібліотека. Вставте SVG у сторінку — і курсор реагує на справжню форму області, а не на прямокутник, підказки системні, а колір задає одне правило CSS. '
+        + 'Кожна область несе свій код ISO 3166-2, тож таблиця з даними лягає на мапу без перекладача.',
       ship: 'Ця сторінка — і демо, і інструкція. Мапу нижче змонтовано компонентом: без нього не було б ні контролів, ні сітки, ні рядка з даними — решту на ній робить сам файл. У проєкт ви берете або SVG-файл, або компонент на {code} КБ (gzip).',
       caption: 'Геометрія: Natural Earth 10m admin-1, рівнокутна конічна проєкція Ламберта зі стандартними паралелями 44,5° і 52°, топологічне спрощення з інтервалом 1,4 км. Центри регіонів нанесено за справжніми координатами, а підписи розставлено вручну, щоб вони не виходили за межі регіону.',
-      mnOrigin: '<b>Звідки взялася сітка.</b> 2012 року ця мапа була PNG-спрайтом із <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: контури для курсора обводилися вручну, зате по справжніх межах — <a href="../../page-2012/index.html">оригінал лежить поруч</a>. Розкладання вийшло з тих самих плиток майже випадково і сподобалося настільки, що під нього варто було підібрати порядок: той, у якому області найменше перетинаються дорогою — три смуги із заходу на схід. Тут сітка — здебільшого внутрішній жарт; якщо він і вам до смаку, це один додатковий файл, <code>ukrmap-unfold.js</code>.',
+      mnOrigin: '<b>Звідки взялася сітка.</b> 2012 року ця мапа була PNG-спрайтом із <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: контури для курсора обводилися вручну, зате по справжніх межах — <a href="https://keymasterr.com/micro/ukrmap/2012/">оригінал лежить поруч</a>. Розкладання вийшло з тих самих плиток майже випадково і сподобалося настільки, що під нього варто було підібрати порядок: той, у якому області найменше перетинаються дорогою — три смуги із заходу на схід. Тут сітка — здебільшого внутрішній жарт; якщо він і вам до смаку, це один додатковий файл, <code>ukrmap-unfold.js</code>.',
       mnSyvash: '<b>Чому Крим тримається на двох перешийках.</b> У Natural Earth Сиваш лежить у шарі озер, тож адміністративні полігони накривають його як суходіл, і на дрібномасштабній мапі смуга між Херсонщиною і Кримом виходить суцільною. Збірка виносить лагуни — Сиваш і Дністровський лиман — в окремий шар і вирізає їх із суходолу ще до проєктування. Звідси й форма: Перекоп на заході, Арабатська стрілка на сході, лагуна між ними.',
       mnFont: '<b>Шрифт до компонента не входить.</b> Підписи беруть шрифт із <code>--ukr-font</code>, а без нього — вузький системний. Ця сторінка завантажує Ubuntu Condensed: зсуви підписів підібрано саме під нього.',
       h2use: 'Як користуватися',
@@ -336,6 +351,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         '<b>Крим і Севастополь — українські.</b> На мапі вони мають свої коди ISO 3166-2 <code>UA-43</code> і <code>UA-40</code>. Natural Earth відносить їх до Росії за принципом фактичного контролю; збірка це виправляє.',
         '<b>Центр Кіровоградської області — Кропивницький, Дніпропетровської — Дніпро</b>: обидва перейменовані 2016 року, вже після першої версії цієї мапи.',
       ],
+      copyright: '© 2012–2026 Roman Kliuchkovych<br><a href="https://keymasterr.com">keymasterr.com</a>',
       footer: 'Код і файли — <a href="https://github.com/keymasterr/ukrmap">github.com/keymasterr/ukrmap</a>, MIT. '
         + 'Перероблено 2026 року на основі версії 2012-го. '
         + 'Геометрія — <a href="https://www.naturalearthdata.com/">Natural Earth</a> (суспільне надбання), '
@@ -424,12 +440,13 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
 
     en: {
       docTitle: 'ukrmap · a small map of Ukraine',
-      meta: 'A small, fast map of Ukraine’s regions: a 13 KB SVG file with ISO 3166-2 codes, hover on real region edges and data-driven color from one CSS rule.',
-      sub: 'A small, fast map of Ukraine’s regions — for websites, the press and statistical reports.',
-      lead: '<em class="lead">Twenty-five regions, {geo} KB of geometry, and no JavaScript required.</em> The map is a plain SVG file: hover follows the real region shapes rather than bounding boxes, tooltips are native, and coloring a region takes one CSS rule.',
+      meta: 'A map of Ukraine’s regions: an image file, not a library. Hover on real region edges, native tooltips, data-driven color from one CSS rule, ISO 3166-2 codes.',
+      sub: 'A map of Ukraine’s regions for websites, the press and statistical reports',
+      lead: 'It is an image file, not a library. Inline the SVG and hover follows the real shape of a region rather than a bounding box, tooltips are native, and color comes from one CSS rule. '
+        + 'Every region carries its ISO 3166-2 code, so a table of data lands on the map without a translation step.',
       ship: 'This page is both a demo and a how-to. The map below is mounted by the component: without it there would be no controls, no grid, no readout. Everything else you see is the file. What you ship is that SVG, or the {code} KB gzipped component.',
       caption: 'Geometry: Natural Earth 10m admin-1, Lambert Conformal Conic with standard parallels at 44.5° and 52°, simplified as a topology at a 1.4 km interval. Administrative centers are at their true projected coordinates; each label is placed by hand to stay inside its region.',
-      mnOrigin: '<b>Where the grid comes from.</b> In 2012 this map was a PNG sprite with <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: the hit areas were traced by hand, but they followed the real borders — <a href="../../page-2012/index.html">the original is still next door</a>. The unfolding fell out of those same tiles almost by accident, and it was good enough to be worth choosing an order for: the one where regions cross each other least on the way — three bands, west to east. Here the grid is mostly an in-joke; if it is your kind of joke, it is one extra file, <code>ukrmap-unfold.js</code>.',
+      mnOrigin: '<b>Where the grid comes from.</b> In 2012 this map was a PNG sprite with <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: the hit areas were traced by hand, but they followed the real borders — <a href="https://keymasterr.com/micro/ukrmap/2012/">the original is still next door</a>. The unfolding fell out of those same tiles almost by accident, and it was good enough to be worth choosing an order for: the one where regions cross each other least on the way — three bands, west to east. Here the grid is mostly an in-joke; if it is your kind of joke, it is one extra file, <code>ukrmap-unfold.js</code>.',
       mnSyvash: '<b>Why Crimea hangs on two necks.</b> Natural Earth files the Syvash with the lakes, so the administrative polygons cover it as land, and on a small-scale map the strip between Kherson and Crimea comes out solid. The build pulls the lagoons — the Syvash and the Dniester Liman — into a layer of their own and erases them from the land before projecting. Hence the shape: the Perekop neck in the west, the Arabat Spit in the east, lagoon in between.',
       mnFont: '<b>The component doesn’t ship a font.</b> Labels ask for <code>--ukr-font</code> and fall back to a condensed system stack. This page loads Ubuntu Condensed, the font the hand-tuned label offsets were measured against.',
       h2use: 'Using it',
@@ -476,6 +493,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         '<b>Crimea and Sevastopol are Ukrainian</b> and are drawn with their ISO 3166-2 codes <code>UA-43</code> and <code>UA-40</code>. Natural Earth files them under Russia, following a de facto control convention; the build corrects that.',
         '<b>Kirovohrad Oblast’s center is Kropyvnytskyi, and Dnipropetrovsk Oblast’s is Dnipro</b> — both renamed in 2016, after the original version of this map.',
       ],
+      copyright: '© 2012–2026 Roman Kliuchkovych<br><a href="https://keymasterr.com">keymasterr.com</a>',
       footer: 'Code and files: <a href="https://github.com/keymasterr/ukrmap">github.com/keymasterr/ukrmap</a>, MIT. '
         + 'Rebuilt in 2026 from the 2012 original. Geometry from '
         + '<a href="https://www.naturalearthdata.com/">Natural Earth</a> (public domain), processed with '
@@ -746,8 +764,15 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
     document.documentElement.lang = lang;
     document.title = T.docTitle;
     /* the description is copy too, and a link preview reads it */
-    var desc = document.querySelector('meta[name=description]');
-    if (desc && T.meta) desc.setAttribute('content', T.meta);
+    var meta = {
+      'meta[name=description]': T.meta,
+      'meta[property="og:description"]': T.meta,
+      'meta[property="og:title"]': T.docTitle,
+    };
+    for (var sel in meta) {
+      var tag = document.querySelector(sel);
+      if (tag && meta[sel]) tag.setAttribute('content', meta[sel]);
+    }
     Array.prototype.forEach.call(document.querySelectorAll('[data-t]'), function (el) {
       var v = T[el.dataset.t];
       if (v === undefined) return;

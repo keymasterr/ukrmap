@@ -20,7 +20,7 @@
     "type": "git",
     "url": "git+https://github.com/keymasterr/ukrmap.git"
   },
-  "homepage": "https://github.com/keymasterr/ukrmap#readme",
+  "homepage": "https://keymasterr.com/micro/ukrmap/",
   "bugs": "https://github.com/keymasterr/ukrmap/issues",
   "main": "dist/ukrmap.js",
   "bin": {
