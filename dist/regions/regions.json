@@ -1,0 +1,502 @@
+[
+  {
+    "key": "UA-07",
+    "file": "UA-07.svg",
+    "name": {
+      "uk": "Волинська область",
+      "en": "Volyn Oblast"
+    },
+    "center": {
+      "uk": "Луцьк",
+      "en": "Lutsk"
+    },
+    "area": 20144,
+    "pop": 1021,
+    "bbox": [
+      1087,
+      228,
+      1276,
+      1385
+    ]
+  },
+  {
+    "key": "UA-56",
+    "file": "UA-56.svg",
+    "name": {
+      "uk": "Рівненська область",
+      "en": "Rivne Oblast"
+    },
+    "center": {
+      "uk": "Рівне",
+      "en": "Rivne"
+    },
+    "area": 20047,
+    "pop": 1141,
+    "bbox": [
+      1767,
+      269,
+      1476,
+      1595
+    ]
+  },
+  {
+    "key": "UA-18",
+    "file": "UA-18.svg",
+    "name": {
+      "uk": "Житомирська область",
+      "en": "Zhytomyr Oblast"
+    },
+    "center": {
+      "uk": "Житомир",
+      "en": "Zhytomyr"
+    },
+    "area": 29832,
+    "pop": 1179,
+    "bbox": [
+      2925,
+      578,
+      1356,
+      1762
+    ]
+  },
+  {
+    "key": "UA-32",
+    "file": "UA-32.svg",
+    "name": {
+      "uk": "Київська область",
+      "en": "Kyiv Oblast"
+    },
+    "center": {
+      "uk": "Київ",
+      "en": "Kyiv"
+    },
+    "area": 28131,
+    "pop": 1788,
+    "bbox": [
+      4057,
+      743,
+      1525,
+      1952
+    ]
+  },
+  {
+    "key": "UA-74",
+    "file": "UA-74.svg",
+    "name": {
+      "uk": "Чернігівська область",
+      "en": "Chernihiv Oblast"
+    },
+    "center": {
+      "uk": "Чернігів",
+      "en": "Chernihiv"
+    },
+    "area": 31865,
+    "pop": 959,
+    "bbox": [
+      4712,
+      0,
+      1559,
+      1716
+    ]
+  },
+  {
+    "key": "UA-59",
+    "file": "UA-59.svg",
+    "name": {
+      "uk": "Сумська область",
+      "en": "Sumy Oblast"
+    },
+    "center": {
+      "uk": "Суми",
+      "en": "Sumy"
+    },
+    "area": 23834,
+    "pop": 1035,
+    "bbox": [
+      6004,
+      4,
+      1492,
+      1881
+    ]
+  },
+  {
+    "key": "UA-63",
+    "file": "UA-63.svg",
+    "name": {
+      "uk": "Харківська область",
+      "en": "Kharkiv Oblast"
+    },
+    "center": {
+      "uk": "Харків",
+      "en": "Kharkiv"
+    },
+    "area": 31415,
+    "pop": 2598,
+    "bbox": [
+      7051,
+      1521,
+      1758,
+      1638
+    ]
+  },
+  {
+    "key": "UA-09",
+    "file": "UA-09.svg",
+    "name": {
+      "uk": "Луганська область",
+      "en": "Luhansk Oblast"
+    },
+    "center": {
+      "uk": "Луганськ",
+      "en": "Luhansk"
+    },
+    "area": 26684,
+    "pop": 2102,
+    "bbox": [
+      8729,
+      1793,
+      1271,
+      1827
+    ]
+  },
+  {
+    "key": "UA-14",
+    "file": "UA-14.svg",
+    "name": {
+      "uk": "Донецька область",
+      "en": "Donetsk Oblast"
+    },
+    "center": {
+      "uk": "Донецьк",
+      "en": "Donetsk"
+    },
+    "area": 26517,
+    "pop": 4059,
+    "bbox": [
+      8084,
+      2510,
+      1421,
+      2012
+    ]
+  },
+  {
+    "key": "UA-23",
+    "file": "UA-23.svg",
+    "name": {
+      "uk": "Запорізька область",
+      "en": "Zaporizhzhia Oblast"
+    },
+    "center": {
+      "uk": "Запоріжжя",
+      "en": "Zaporizhzhia"
+    },
+    "area": 27180,
+    "pop": 1613,
+    "bbox": [
+      6780,
+      3521,
+      1720,
+      1585
+    ]
+  },
+  {
+    "key": "UA-65",
+    "file": "UA-65.svg",
+    "name": {
+      "uk": "Херсонська область",
+      "en": "Kherson Oblast"
+    },
+    "center": {
+      "uk": "Херсон",
+      "en": "Kherson"
+    },
+    "area": 28461,
+    "pop": 1001,
+    "bbox": [
+      5306,
+      4033,
+      2138,
+      1533
+    ]
+  },
+  {
+    "key": "UA-43",
+    "file": "UA-43.svg",
+    "name": {
+      "uk": "Автономна Республіка Крим",
+      "en": "Autonomous Republic of Crimea"
+    },
+    "center": {
+      "uk": "Сімферополь",
+      "en": "Simferopol"
+    },
+    "area": 26081,
+    "pop": 1913,
+    "bbox": [
+      5820,
+      5175,
+      2467,
+      1539
+    ]
+  },
+  {
+    "key": "UA-48",
+    "file": "UA-48.svg",
+    "name": {
+      "uk": "Миколаївська область",
+      "en": "Mykolaiv Oblast"
+    },
+    "center": {
+      "uk": "Миколаїв",
+      "en": "Mykolaiv"
+    },
+    "area": 24598,
+    "pop": 1091,
+    "bbox": [
+      4512,
+      3505,
+      1662,
+      1467
+    ]
+  },
+  {
+    "key": "UA-51",
+    "file": "UA-51.svg",
+    "name": {
+      "uk": "Одеська область",
+      "en": "Odesa Oblast"
+    },
+    "center": {
+      "uk": "Одеса",
+      "en": "Odesa"
+    },
+    "area": 33310,
+    "pop": 2351,
+    "bbox": [
+      3281,
+      3496,
+      1844,
+      2528
+    ]
+  },
+  {
+    "key": "UA-05",
+    "file": "UA-05.svg",
+    "name": {
+      "uk": "Вінницька область",
+      "en": "Vinnytsia Oblast"
+    },
+    "center": {
+      "uk": "Вінниця",
+      "en": "Vinnytsia"
+    },
+    "area": 26513,
+    "pop": 1509,
+    "bbox": [
+      2934,
+      2082,
+      1506,
+      1583
+    ]
+  },
+  {
+    "key": "UA-68",
+    "file": "UA-68.svg",
+    "name": {
+      "uk": "Хмельницька область",
+      "en": "Khmelnytskyi Oblast"
+    },
+    "center": {
+      "uk": "Хмельницький",
+      "en": "Khmelnytskyi"
+    },
+    "area": 20645,
+    "pop": 1229,
+    "bbox": [
+      2294,
+      1450,
+      962,
+      1769
+    ]
+  },
+  {
+    "key": "UA-61",
+    "file": "UA-61.svg",
+    "name": {
+      "uk": "Тернопільська область",
+      "en": "Ternopil Oblast"
+    },
+    "center": {
+      "uk": "Тернопіль",
+      "en": "Ternopil"
+    },
+    "area": 13823,
+    "pop": 1021,
+    "bbox": [
+      1516,
+      1676,
+      891,
+      1487
+    ]
+  },
+  {
+    "key": "UA-46",
+    "file": "UA-46.svg",
+    "name": {
+      "uk": "Львівська область",
+      "en": "Lviv Oblast"
+    },
+    "center": {
+      "uk": "Львів",
+      "en": "Lviv"
+    },
+    "area": 21833,
+    "pop": 2478,
+    "bbox": [
+      392,
+      1280,
+      1550,
+      1572
+    ]
+  },
+  {
+    "key": "UA-21",
+    "file": "UA-21.svg",
+    "name": {
+      "uk": "Закарпатська область",
+      "en": "Zakarpattia Oblast"
+    },
+    "center": {
+      "uk": "Ужгород",
+      "en": "Uzhhorod"
+    },
+    "area": 12777,
+    "pop": 1244,
+    "bbox": [
+      0,
+      2495,
+      1370,
+      1088
+    ]
+  },
+  {
+    "key": "UA-26",
+    "file": "UA-26.svg",
+    "name": {
+      "uk": "Івано-Франківська область",
+      "en": "Ivano-Frankivsk Oblast"
+    },
+    "center": {
+      "uk": "Івано-Франківськ",
+      "en": "Ivano-Frankivsk"
+    },
+    "area": 13928,
+    "pop": 1351,
+    "bbox": [
+      808,
+      2237,
+      1165,
+      1536
+    ]
+  },
+  {
+    "key": "UA-77",
+    "file": "UA-77.svg",
+    "name": {
+      "uk": "Чернівецька область",
+      "en": "Chernivtsi Oblast"
+    },
+    "center": {
+      "uk": "Чернівці",
+      "en": "Chernivtsi"
+    },
+    "area": 8097,
+    "pop": 890,
+    "bbox": [
+      1509,
+      2996,
+      1492,
+      777
+    ]
+  },
+  {
+    "key": "UA-71",
+    "file": "UA-71.svg",
+    "name": {
+      "uk": "Черкаська область",
+      "en": "Cherkasy Oblast"
+    },
+    "center": {
+      "uk": "Черкаси",
+      "en": "Cherkasy"
+    },
+    "area": 20900,
+    "pop": 1151,
+    "bbox": [
+      4184,
+      1797,
+      1798,
+      1504
+    ]
+  },
+  {
+    "key": "UA-35",
+    "file": "UA-35.svg",
+    "name": {
+      "uk": "Кіровоградська область",
+      "en": "Kirovohrad Oblast"
+    },
+    "center": {
+      "uk": "Кропивницький",
+      "en": "Kropyvnytskyi"
+    },
+    "area": 24588,
+    "pop": 906,
+    "bbox": [
+      4247,
+      2623,
+      2334,
+      1279
+    ]
+  },
+  {
+    "key": "UA-53",
+    "file": "UA-53.svg",
+    "name": {
+      "uk": "Полтавська область",
+      "en": "Poltava Oblast"
+    },
+    "center": {
+      "uk": "Полтава",
+      "en": "Poltava"
+    },
+    "area": 28748,
+    "pop": 1362,
+    "bbox": [
+      5545,
+      1535,
+      1869,
+      1501
+    ]
+  },
+  {
+    "key": "UA-12",
+    "file": "UA-12.svg",
+    "name": {
+      "uk": "Дніпропетровська область",
+      "en": "Dnipropetrovsk Oblast"
+    },
+    "center": {
+      "uk": "Дніпро",
+      "en": "Dnipro"
+    },
+    "area": 31914,
+    "pop": 3096,
+    "bbox": [
+      6080,
+      2654,
+      2209,
+      1454
+    ]
+  }
+]

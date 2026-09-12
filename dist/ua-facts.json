@@ -1,0 +1,123 @@
+{
+ "v": 1,
+ "area": {
+  "unit": "km2",
+  "source": "official figures, stable"
+ },
+ "pop": {
+  "unit": "thousands",
+  "asOf": "2022-01-01",
+  "source": "State Statistics Service of Ukraine",
+  "note": "Before the full-scale invasion. Crimea (UA-43) and Sevastopol (UA-40) are 2014, the last figures Ukraine published. Indicative."
+ },
+ "units": {
+  "UA-07": {
+   "area": 20144,
+   "pop": 1021
+  },
+  "UA-56": {
+   "area": 20047,
+   "pop": 1141
+  },
+  "UA-18": {
+   "area": 29832,
+   "pop": 1179
+  },
+  "UA-32": {
+   "area": 28131,
+   "pop": 1788
+  },
+  "UA-30": {
+   "area": 839,
+   "pop": 2952
+  },
+  "UA-74": {
+   "area": 31865,
+   "pop": 959
+  },
+  "UA-59": {
+   "area": 23834,
+   "pop": 1035
+  },
+  "UA-63": {
+   "area": 31415,
+   "pop": 2598
+  },
+  "UA-09": {
+   "area": 26684,
+   "pop": 2102
+  },
+  "UA-14": {
+   "area": 26517,
+   "pop": 4059
+  },
+  "UA-23": {
+   "area": 27180,
+   "pop": 1613
+  },
+  "UA-65": {
+   "area": 28461,
+   "pop": 1001
+  },
+  "UA-43": {
+   "area": 26081,
+   "pop": 1913
+  },
+  "UA-40": {
+   "area": 864,
+   "pop": 449
+  },
+  "UA-48": {
+   "area": 24598,
+   "pop": 1091
+  },
+  "UA-51": {
+   "area": 33310,
+   "pop": 2351
+  },
+  "UA-05": {
+   "area": 26513,
+   "pop": 1509
+  },
+  "UA-68": {
+   "area": 20645,
+   "pop": 1229
+  },
+  "UA-61": {
+   "area": 13823,
+   "pop": 1021
+  },
+  "UA-46": {
+   "area": 21833,
+   "pop": 2478
+  },
+  "UA-21": {
+   "area": 12777,
+   "pop": 1244
+  },
+  "UA-26": {
+   "area": 13928,
+   "pop": 1351
+  },
+  "UA-77": {
+   "area": 8097,
+   "pop": 890
+  },
+  "UA-71": {
+   "area": 20900,
+   "pop": 1151
+  },
+  "UA-35": {
+   "area": 24588,
+   "pop": 906
+  },
+  "UA-53": {
+   "area": 28748,
+   "pop": 1362
+  },
+  "UA-12": {
+   "area": 31914,
+   "pop": 3096
+  }
+ }
+}

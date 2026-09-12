@@ -1,0 +1,59 @@
+{
+  "name": "ukrmap",
+  "version": "3.0.0",
+  "description": "A small, fast SVG map of Ukraine's regions. Static file first: hover, tooltips and choropleth work from CSS alone. Optional layers add the unfolded view and live data.",
+  "keywords": [
+    "ukraine",
+    "map",
+    "svg",
+    "regions",
+    "oblast",
+    "choropleth",
+    "cartography",
+    "iso-3166-2",
+    "natural-earth",
+    "no-dependencies"
+  ],
+  "license": "MIT",
+  "author": "Roman Kliuchkovych (https://github.com/keymasterr)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keymasterr/ukrmap.git"
+  },
+  "homepage": "https://github.com/keymasterr/ukrmap#readme",
+  "bugs": "https://github.com/keymasterr/ukrmap/issues",
+  "main": "dist/ukrmap.js",
+  "bin": {
+    "ukrmap": "bin/ukrmap.js"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "DESIGN.md",
+    "bin/ukrmap.js",
+    "data/ua-1400.json",
+    "data/ua-2800.json",
+    "data/ua-700.json",
+    "data/ua-facts.json",
+    "dist/",
+    "src/ukrmap-unfold.js",
+    "src/ukrmap.js"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "geo": "./build/geo.sh",
+    "pack": "node build/pack.js",
+    "demo": "node build/demo.js",
+    "site": "node build/site.js",
+    "build": "node build/pack.js && node build/dist.js && node build/demo.js",
+    "check-labels": "node build/check-labels.js && echo 'open _tmp/check-labels.html and run checkLabels()'",
+    "svg": "node bin/ukrmap.js",
+    "test": "node test/test.js",
+    "dist": "node build/dist.js"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "sideEffects": false
+}
