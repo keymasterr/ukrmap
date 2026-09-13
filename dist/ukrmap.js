@@ -44,8 +44,8 @@
     for (var key in WF) out[key] = Math.round(WF[key] * k * 100) / 100;
     return out;
   }
-  var WU = { coast: 23, glow: 116, river: 32, riverMinor: 20, lake: 12 };
-  var WMIN = { coast: 1.1, glow: 4, river: 1.15, riverMinor: .8, lake: .5 };
+  var WU = { glow: 80, river: 32, riverMinor: 20, lake: 12 };
+  var WMIN = { glow: 4, river: 1.15, riverMinor: .8, lake: .5 };
   function wpx(p, k) {
     return 'max(calc(' + WU[k] + 'px * var(--' + p + 'wscale,1)),'
          + 'calc(' + WMIN[k] + 'px * var(--' + p + 'u,0)))';
@@ -464,15 +464,14 @@
       '.' + p + 'borders{stroke:var(--' + p + 'line);stroke-width:' + W.border + '}' +
       '.' + p + 'outline{stroke:var(--' + p + 'outline);stroke-width:' + W.outline + '}' +
       '.' + p + 'coast{stroke:var(--' + p + 'outline);stroke-width:' + W.outline + ';' +
-        'vector-effect:non-scaling-stroke}' +
+        'vector-effect:non-scaling-stroke;stroke-linejoin:bevel}' +
       '.' + p + 'coastglow{stroke:var(--' + p + 'coast);' +
         'stroke-opacity:calc(var(--' + p + 'glow) * var(--' + p + 'waterop));' +
         'stroke-width:' + wpx(p, 'glow') + ';' +
         'stroke-linejoin:round;stroke-linecap:round;display:none}' +
       '.' + p + 'map.w-on .' + p + 'coastglow{display:block}' +
       '.' + p + 'map.w-on .' + p + 'coast{stroke:var(--' + p + 'coast);' +
-        'stroke-opacity:var(--' + p + 'waterop);' +
-        'stroke-width:' + wpx(p, 'coast') + ';vector-effect:none}' +
+        'stroke-opacity:var(--' + p + 'waterop)}' +
       '.' + p + 'water{pointer-events:none;display:none}' +
       '.' + p + 'map.w-on .' + p + 'water{display:block}' +
       '.' + p + 'waterink{opacity:var(--' + p + 'waterop)}' +
@@ -609,7 +608,7 @@
       body += '<path class="' + p + 'outline"' + linePaint(P.outline, LW.outline, true) + ' d="' + e.frontier + '"/>';
     if (o.outline && e.coast)
       body += '<path class="' + p + 'coast"'
-        + linePaint(w.coast ? P.water : P.outline, w.coast ? WU.coast : LW.outline, true)
+        + linePaint(w.coast ? P.water : P.outline, LW.outline, true)
         + ' d="' + e.coast + '"/>';
     if (wantCity || wantName) {
       var owner = {};
@@ -735,7 +734,7 @@
     }
     if (shore) {
       body += '<path class="' + p + 'coast" d="' + shore + '"'
-        + (bake ? ' fill="none" stroke="' + P.water + '" stroke-width="' + WU.coast + '"' : '') + '/>';
+        + (bake ? ' fill="none" stroke="' + P.water + '" stroke-width="' + WF.outline + '"' : '') + '/>';
     }
     if (o.labels === 'city' || o.labels === 'all') {
       var anchor = u.an === 's' ? 'start' : u.an === 'e' ? 'end' : 'middle';

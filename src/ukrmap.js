@@ -142,10 +142,10 @@
   }
 
   /* map units, at the standard 10000-wide map */
-  var WU = { coast: 23, glow: 116, river: 32, riverMinor: 20, lake: 12 };
+  var WU = { glow: 80, river: 32, riverMinor: 20, lake: 12 };
 
   /* device-pixel floor for each of the above, so small maps keep their water */
-  var WMIN = { coast: 1.1, glow: 4, river: 1.15, riverMinor: .8, lake: .5 };
+  var WMIN = { glow: 4, river: 1.15, riverMinor: .8, lake: .5 };
 
   /* stroke-width that is proportional to the map but never thinner than a
      device-pixel floor. --ukr-u is user units per CSS px; a static file has no
@@ -844,10 +844,15 @@
       '.' + p + 'borders,.' + p + 'outline{vector-effect:non-scaling-stroke}' +
       '.' + p + 'borders{stroke:var(--' + p + 'line);stroke-width:' + W.border + '}' +
       '.' + p + 'outline{stroke:var(--' + p + 'outline);stroke-width:' + W.outline + '}' +
-      /* With water off the coast is just more national boundary, so it is
-         drawn as one: same color, same device-pixel weight. */
+      /* The shore is drawn at the national outline's weight, pinned to device
+         pixels like it — the same line continued, and with water on it only
+         changes color. As a proportional stroke it could not be right twice:
+         at 1100 px it came out two and a half pixels against the outline's
+         one, and at 300 px it was thinner than the outline it continues.
+         Bevel, because a shoreline turns on itself at angles a miter answers
+         with spikes. */
       '.' + p + 'coast{stroke:var(--' + p + 'outline);stroke-width:' + W.outline + ';' +
-        'vector-effect:non-scaling-stroke}' +
+        'vector-effect:non-scaling-stroke;stroke-linejoin:bevel}' +
 
       /* The pale band sits UNDER the regions, so the land covers its inland
          half and only the seaward half shows — which is what makes it read as
@@ -868,8 +873,7 @@
          price, and it is the right way round — --ukr-waterop is a deliberate
          act, and one that says "make the water quieter". */
       '.' + p + 'map.w-on .' + p + 'coast{stroke:var(--' + p + 'coast);' +
-        'stroke-opacity:var(--' + p + 'waterop);' +
-        'stroke-width:' + wpx(p, 'coast') + ';vector-effect:none}' +
+        'stroke-opacity:var(--' + p + 'waterop)}' +
 
       '.' + p + 'water{pointer-events:none;display:none}' +
       '.' + p + 'map.w-on .' + p + 'water{display:block}' +
@@ -1081,7 +1085,7 @@
       body += '<path class="' + p + 'outline"' + linePaint(P.outline, LW.outline, true) + ' d="' + e.frontier + '"/>';
     if (o.outline && e.coast)
       body += '<path class="' + p + 'coast"'
-        + linePaint(w.coast ? P.water : P.outline, w.coast ? WU.coast : LW.outline, true)
+        + linePaint(w.coast ? P.water : P.outline, LW.outline, true)
         + ' d="' + e.coast + '"/>';
 
     /* --- labels last, so nothing can paint over them --- */
@@ -1258,7 +1262,7 @@
     }
     if (shore) {
       body += '<path class="' + p + 'coast" d="' + shore + '"'
-        + (bake ? ' fill="none" stroke="' + P.water + '" stroke-width="' + WU.coast + '"' : '') + '/>';
+        + (bake ? ' fill="none" stroke="' + P.water + '" stroke-width="' + WF.outline + '"' : '') + '/>';
     }
 
     if (o.labels === 'city' || o.labels === 'all') {

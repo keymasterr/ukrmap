@@ -39,7 +39,7 @@ hr { border: 0; border-top: 1px solid #e2ddcd; margin: 3rem 0; }
   float: right; clear: right; width: 34%; margin: .35rem 0 .9rem 0;
   font-size: .92rem; line-height: 1.42; color: #56514a;
 }
-.mn b { font-weight: 400; color: #111; }
+.mn b { color: #111; }
 
 .keep-together { display: inline-block; }
 code, kbd { display: inline-block; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .85em; background: #e4eeed82; border-radius: 3px; }
@@ -214,7 +214,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
   p, ul, ol, figcaption { width: auto; }
   .mn { float: none; width: 100%; margin: .9rem 0 1.2rem; padding-left: 1rem;
         border-left: 2px solid #e2ddcd; }
-  pre, table { width: 100%; }
+  pre, table { width: fit-content; max-width: 100%; }
   .top { flex-direction: column; gap: .6rem; }
   .top-right { flex-direction: row; align-items: baseline; gap: 2rem; padding-top: 0; }
 }
@@ -335,20 +335,20 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
       lead: 'Це файл зображення, а не бібліотека. Вставте SVG у сторінку — і курсор реагує на справжню форму області, а не на прямокутник, підказки системні, а колір задає одне правило CSS. '
         + 'Кожна область несе свій код <span class="keep-together">ISO 3166-2</span>, тож таблиця з даними лягає на мапу без перекладача.',
       ship: 'Ця сторінка — і демо, і інструкція. Мапу нижче змонтовано компонентом: без нього не було б ні контролів, ні рядка з даними під нею — решту на ній робить сам файл. У проєкт ви берете або SVG-файл, або компонент на <span class="keep-together">{code} КБ (gzip)</span>.',
-      mnFiles: '<b>Готові файли.</b> Якщо налаштовувати нічого не треба, беріть як є:<br>'
+      mnFiles: '<b>Готові файли.</b> Якщо налаштовувати нічого не треба, беріть як є:<br>'
         + '<a href="../dist/ua.svg">ua.svg</a> — типовий, для сайту<br>'
         + '<a href="../dist/ua-blank.svg">ua-blank.svg</a> — сама геометрія<br>'
-        + '<a href="../dist/ua-flat.svg">ua-flat.svg</a> — кольори в атрибутах, 1600 px, для Figma й Keynote<br>'
-        + '<a href="../dist/ua-print.svg">ua-print.svg</a> — 700 м, усі річки<br>'
+        + '<a href="../dist/ua-flat.svg">ua-flat.svg</a> — кольори в атрибутах, 1600 px, для Figma й Keynote<br>'
+        + '<a href="../dist/ua-print.svg">ua-print.svg</a> — 700 , усі річки<br>'
         + 'Дані окремо: <a href="../dist/ua-facts.json">ua-facts.json</a>, '
         + '<a href="../dist/ua-wgs84.geo.json">ua-wgs84.geo.json</a>.',
       caption: 'Геометрія: Natural Earth 10m admin-1, рівнокутна конічна проєкція Ламберта зі стандартними паралелями 44,5° і 52°, топологічне спрощення з інтервалом 1,4 км. Центри регіонів нанесено за справжніми координатами, а підписи розставлено вручну, щоб вони не виходили за межі регіону.',
       mnFold: '<b>Звідки ця мапа.</b> 2012 року вона була PNG-спрайтом із <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: контури для курсора обводилися вручну, зате по справжніх межах — <a href="https://keymasterr.com/micro/ukrmap/2012/">оригінал лежить поруч</a>. Реакція на справжню форму області — звідти, як і сітка: розкладання вийшло з тих самих плиток майже випадково і сподобалося настільки, що під нього варто було підібрати порядок — той, у якому області найменше перетинаються дорогою, три смуги із заходу на схід. Тут це здебільшого внутрішній жарт; якщо він і вам до смаку, це один додатковий файл, <code>ukrmap-unfold.js</code>.',
-      mnSyvash: '<b>Чому Крим тримається на двох перешийках.</b> У Natural Earth Сиваш лежить у шарі озер, тож адміністративні полігони накривають його як суходіл, і на дрібномасштабній мапі смуга між Херсонщиною і Кримом виходить суцільною. Збірка виносить лагуни — Сиваш і Дністровський лиман — в окремий шар і вирізає їх із суходолу ще до проєктування. Звідси й форма: Перекоп на заході, Арабатська стрілка на сході, лагуна між ними.',
+      mnSyvash: '<b>Сиваш і форма Криму.</b> У Natural Earth Сиваш лежить у шарі озер, тож адміністративні полігони накривають його як суходіл, і на дрібномасштабній мапі смуга між Херсонщиною і Кримом виходить суцільною. Збірка виносить лагуни — Сиваш і Дністровський лиман — в окремий шар і вирізає їх із суходолу ще до проєктування.',
       mnFont: '<b>Шрифт до компонента не входить.</b> Підписи беруть шрифт із <code>--ukr-font</code>, а без нього — вузький системний. Ця сторінка завантажує Ubuntu Condensed: зсуви підписів підібрано саме під нього.',
       h2use: 'Як користуватися',
       h3file: '1 · Просто файл',
-      pfile: '<b>Мапа вгорі — це і є файл.</b> Налаштуйте її (мова, підписи, вода, Київ, палітра) і натисніть <b>зберегти</b>. <b>SVG</b> (1600 px, кольори в атрибутах) — для Illustrator, Figma чи друку; <b>PNG</b> (2400 px) — для Word, Google Презентацій, Telegram і всього, що не підтримує SVG. Нічого встановлювати не треба.',
+      pfile: '<b>Мапа вгорі — це і є файл.</b> Налаштуйте її (мова, підписи, вода, Київ, палітра) і натисніть <b>зберегти</b>. <b>SVG</b> (1600 px, кольори в атрибутах) — для Illustrator, Figma чи друку; <b>PNG</b> (2400 px) — для Word, Google Презентацій, Telegram і всього, що не підтримує SVG. Нічого встановлювати не треба.',
       pfile2: 'Те саме можна зробити з термінала, наприклад у скрипті збірки чи в боті, що щогодини перемальовує мапу. Усі прапорці описано в README: рівні деталізації для <code>--detail</code> — у таблиці внизу, а інший розмір файлу задає <code>--width</code>.',
       prefile: 'npx github:keymasterr/ukrmap -o ua.svg\n\n'
         + '<span class="c"># розфарбувати за таблицею: {"UA-46": "#c0392b", …}</span>\n'
@@ -380,9 +380,9 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '&lt;/script&gt;',
       h2data: 'Як улаштовані дані',
       pdata: 'По одному файлу на рівень деталізації. Це топологія, а не набір полігонів: кожна дуга зберігається один раз, а регіон — це список індексів дуг. Внутрішні межі й державний кордон окремо не зберігаються: їх виводять із того, скільком регіонам належить кожна дуга. Тому й Київ, коли його виділити окремо, отримує правильну межу. Рівень деталізації — це крок спрощення в метрах: менший крок — більше точок і важчий файл.',
-      thDetail: 'деталізація', thPoints: 'точок', thFile: 'файл', thUse: 'коли використовувати',
+      thDetail: 'деталізація', thPoints: 'точок', thFile: 'файл', thUse: 'навіщо',
       usesPrint: 'друк і великі розміри', usesDefault: 'за замовчуванням',
-      usesSmall: 'якщо мапа не ширша за 470 px',
+      usesSmall: 'якщо мапа не ширша за 470 px',
       pcarries: 'Крім геометрії, у файлі є назва області українською й англійською, центр — назва і координати в проєкції, габарити для сітки та ручні зсуви підписів.',
       h2notes: 'Примітки',
       notes: [
@@ -483,19 +483,19 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + 'Every region carries its <span class="keep-together">ISO 3166-2</span> code, so a table of data lands on the map without a translation step.',
       ship: 'This page is both a demo and a how-to. The map below is mounted by the component: without it there would be no controls and no readout. Everything else you see is the file. What you ship is that SVG, or the <span class="keep-together">{code} KB</span> gzipped component.',
       mnFiles: '<b>Ready-made files.</b> If there is nothing to set up, take one as it is:<br>'
-        + '<a href="../dist/ua.svg">ua.svg</a> — the default, for the web<br>'
-        + '<a href="../dist/ua-blank.svg">ua-blank.svg</a> — geometry only<br>'
-        + '<a href="../dist/ua-flat.svg">ua-flat.svg</a> — colors in attributes, 1600 px, for Figma and Keynote<br>'
-        + '<a href="../dist/ua-print.svg">ua-print.svg</a> — 700 m, every river<br>'
+        + '<a href="../dist/ua-en.svg">ua-en.svg</a> — the default, for the web<br>'
+        + '<a href="../dist/ua-blank.svg">ua-blank.svg</a> — geometry only, no labels<br>'
+        + '<a href="../dist/ua-flat-en.svg">ua-flat-en.svg</a> — colors in attributes, 1600 px, for Figma and Keynote<br>'
+        + '<a href="../dist/ua-print.svg">ua-print.svg</a> — 700 m, every river (Ukrainian labels)<br>'
         + 'Data separately: <a href="../dist/ua-facts.json">ua-facts.json</a>, '
         + '<a href="../dist/ua-wgs84.geo.json">ua-wgs84.geo.json</a>.',
       caption: 'Geometry: Natural Earth 10m admin-1, Lambert Conformal Conic with standard parallels at 44.5° and 52°, simplified as a topology at a 1.4 km interval. Administrative centers are at their true projected coordinates; each label is placed by hand to stay inside its region.',
       mnFold: '<b>Where this map comes from.</b> In 2012 it was a PNG sprite with <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: the hit areas were traced by hand, but they followed the real borders — <a href="https://keymasterr.com/micro/ukrmap/2012/">the original is still next door</a>. Hover on the true shape of a region survived from there, and so did the grid: the unfolding fell out of those same tiles almost by accident, and it was good enough to be worth choosing an order for — the one where regions cross each other least on the way, three bands west to east. Here it is mostly an in-joke; if it is your kind of joke, it is one extra file, <code>ukrmap-unfold.js</code>.',
-      mnSyvash: '<b>Why Crimea hangs on two necks.</b> Natural Earth files the Syvash with the lakes, so the administrative polygons cover it as land, and on a small-scale map the strip between Kherson and Crimea comes out solid. The build pulls the lagoons — the Syvash and the Dniester Liman — into a layer of their own and erases them from the land before projecting. Hence the shape: the Perekop neck in the west, the Arabat Spit in the east, lagoon in between.',
+      mnSyvash: '<b>The Syvash, and the shape of Crimea.</b> Natural Earth files the Syvash with the lakes, so the administrative polygons cover it as land, and on a small-scale map the strip between Kherson and Crimea comes out solid. The build pulls the lagoons — the Syvash and the Dniester Liman — into a layer of their own and erases them from the land before projecting.',
       mnFont: '<b>The component doesn’t ship a font.</b> Labels ask for <code>--ukr-font</code> and fall back to a condensed system stack. This page loads Ubuntu Condensed, the font the hand-tuned label offsets were measured against.',
       h2use: 'Using it',
       h3file: '1 · Just the file',
-      pfile: '<b>The map above is the file.</b> Set it up (language, labels, water, Kyiv, palette) and press <b>save</b>. <b>SVG</b> at 1600 px with the colors in attributes — for Illustrator, Figma or print; <b>PNG</b> at 2400 px for Word, Google Slides, Telegram and anything else that doesn’t support SVG. Nothing to install.',
+      pfile: '<b>The map above is the file.</b> Set it up (language, labels, water, Kyiv, palette) and press <b>save</b>. <b>SVG</b> at 1600 px with the colors in attributes — for Illustrator, Figma or print; <b>PNG</b> at 2400 px for Word, Google Slides, Telegram and anything else that doesn’t support SVG. Nothing to install.',
       pfile2: 'The same works from a terminal, for a build step or a bot that redraws the map every hour. All the flags are in the README: the levels for <code>--detail</code> are in the table further down, and <code>--width</code> asks for a different size.',
       prefile: 'npx github:keymasterr/ukrmap -o ua.svg\n\n'
         + '<span class="c"># color it from a table: {"UA-46": "#c0392b", …}</span>\n'
@@ -528,7 +528,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
       pdata: 'One file per detail level. It’s a topology, not a set of polygons: every arc is stored once and each region is a list of arc indices. Internal borders and the national outline aren’t stored as separate lines; they’re derived from how many regions use each arc. That’s also why Kyiv City gets the right boundary when you split it out. A detail level is a simplification interval in meters: a smaller interval means more points and a heavier file.',
       thDetail: 'detail', thPoints: 'points', thFile: 'file', thUse: 'when to use it',
       usesPrint: 'print and large sizes', usesDefault: 'the default',
-      usesSmall: 'if the map is no wider than 470 px',
+      usesSmall: 'if the map is no wider than 470 px',
       pcarries: 'Besides the geometry, the file carries each region’s name in Ukrainian and English, its administrative center — the name and the projected coordinates — the bounding box the unfolded layout needs, and the hand-tuned label offsets.',
       h2notes: 'Notes',
       notes: [
@@ -960,8 +960,11 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
     var stops = [0, 0.25, 0.5, 0.75, 1];
     var d = densScale.domain;
     var marks = paintMap.units.map(function (u) {
-      var v = dens[u.key];
-      return '<i style="left:' + (densScale.posOf(v) * 100).toFixed(2) + '%" title="'
+      /* not the two extremes: the bar already starts at one and ends at the
+         other, and a hairline on a rounded corner only argues with it */
+      var v = dens[u.key], t = densScale.posOf(v);
+      if (t <= 0 || t >= 1) return '';
+      return '<i style="left:' + (t * 100).toFixed(2) + '%" title="'
         + UkrMap.fullName(u.head, lang) + ': ' + v + T.perkm + '"></i>';
     }).join('');
     host.innerHTML =
@@ -987,7 +990,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
      who will never run npx still gets the file they came for. */
   var PNG_W = 2400;
   /* The SVG comes down at a stated size, because a baked file's line weights
-     are only right at one. 1600 px is a layout: big enough to place on a
+     are only right at one. 1600 px is a layout: big enough to place on a
      spread, small enough that nobody has to resize it — and resizing is where
      the weights go wrong, since a design tool honors neither the custom
      properties nor the non-scaling strokes a browser uses. The raster is
@@ -1059,7 +1062,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
   var pinMap = null;
   var PINS = [
     { ll: [31.1828, 48.4501], uk: 'Географічний центр', en: 'Geographic center' },
-    { ll: [24.5003, 48.1600], uk: 'Говерла, 2061 м', en: 'Hoverla, 2,061 m' },
+    { ll: [24.5003, 48.1600], uk: 'Говерла, 2061 ', en: 'Hoverla, 2,061 m' },
     // { ll: [33.8700, 46.4510], uk: 'Асканія-Нова', en: 'Askania-Nova' },
     // { ll: [32.9700, 46.5900], uk: 'Олешківські піски', en: 'Oleshky Sands' },
     { ll: [34.2000, 46.0500], uk: 'Сиваш', en: 'Syvash' },
@@ -1109,7 +1112,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
   /* The unfolded view lives here now, on its own small map. On the main map it
      cost more than it was worth: the plugin widens the viewBox to 1.62× so the
      grid fits, and that width is reserved in both views — Ukraine was drawn
-     685 px wide in a 1120 px figure. It was also the one control whose result
+     685 px wide in a 1120 px figure. It was also the one control whose result
      the save buttons could not hand over. */
   foldMap = UkrMap('#fold', {
     data: window.UKR_DATA, labels: 'none', water: true, lang: lang, titles: false,
