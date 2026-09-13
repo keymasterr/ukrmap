@@ -82,7 +82,7 @@ Three details make it behave:
 
 ```bash
 ./build/geo.sh          # Natural Earth -> build/cache/  (downloads ~53 MB once)
-node build/pack.js      # cache -> data/ua-*.json
+node build/pack.js      # cache -> data/ukrmap-*.json
 node build/demo.js      # refresh demo/
 ```
 

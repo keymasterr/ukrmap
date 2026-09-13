@@ -34,7 +34,7 @@ const HERE = path.join(__dirname, '..');
 const detail = Number(process.argv[2] || 1400);
 
 const lib = fs.readFileSync(path.join(HERE, 'src/ukrmap.js'), 'utf8');
-const data = fs.readFileSync(path.join(HERE, 'data', `ua-${detail}.json`), 'utf8');
+const data = fs.readFileSync(path.join(HERE, 'data', `ukrmap-${detail}.json`), 'utf8');
 
 const html = `<!doctype html>
 <meta charset="utf-8">

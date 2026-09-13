@@ -14,8 +14,8 @@ const path = require('path');
 const UkrMap = require('../src/ukrmap.js');
 
 const LEVELS = [700, 1400, 2800];
-const FACTS = require(path.join(__dirname, '..', 'data', 'ua-facts.json'));
-const loadRaw = (d) => require(path.join(__dirname, '..', 'data', `ua-${d}.json`));
+const FACTS = require(path.join(__dirname, '..', 'data', 'ukrmap-facts.json'));
+const loadRaw = (d) => require(path.join(__dirname, '..', 'data', `ukrmap-${d}.json`));
 const load = (d) => UkrMap.facts(loadRaw(d), FACTS);
 
 /* A real nesting check beats counting tags: it catches an unclosed <a> or a
@@ -84,7 +84,7 @@ test('facts file is separate, dated, and complete', () => {
 test('geometry alone carries no figures; attaching facts supplies them', () => {
   /* straight off disk: require() caches, and an earlier load() has already
      mutated that cached object by attaching facts to it */
-  const raw = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'ua-2800.json'), 'utf8'));
+  const raw = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'ukrmap-2800.json'), 'utf8'));
   assert.ok(raw.units.every((u) => u.area === undefined), 'geometry file has no areas');
   const bare = UkrMap.units(raw, {});
   assert.strictEqual(bare[0].area, null, 'null, not 0, when no facts are attached');

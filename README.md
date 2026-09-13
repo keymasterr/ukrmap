@@ -11,20 +11,20 @@ A small, fast SVG map of Ukraine's 25 regions, for websites, press and statistic
 <!-- files:start — written by build/dist.js; do not edit by hand -->
 | | | |
 |---|---|---:|
-| [`ua.svg`](dist/ua.svg) | default — city labels, coastline, the Dnipro | 16.8 KB |
-| [`ua-en.svg`](dist/ua-en.svg) | the same in English | 16.5 KB |
-| [`ua-regions.svg`](dist/ua-regions.svg) | region names instead of centers | 16.6 KB |
-| [`ua-blank.svg`](dist/ua-blank.svg) | geometry only, color it yourself | 13.3 KB |
-| [`ua-flat.svg`](dist/ua-flat.svg) | colors baked on, 1600 px — for Figma, Keynote, Illustrator | 17.4 KB |
-| [`ua-print.svg`](dist/ua-print.svg) | 700 m detail, every river | 33.7 KB |
-| [`ua-small.svg`](dist/ua-small.svg) | coarsest of the three | 10.1 KB |
+| [`ukrmap.svg`](dist/ukrmap.svg) | default — city labels, coastline, the Dnipro | 16.8 KB |
+| [`ukrmap-en.svg`](dist/ukrmap-en.svg) | the same in English | 16.5 KB |
+| [`ukrmap-regions.svg`](dist/ukrmap-regions.svg) | region names instead of centers | 16.6 KB |
+| [`ukrmap-blank.svg`](dist/ukrmap-blank.svg) | geometry only, color it yourself | 13.3 KB |
+| [`ukrmap-baked.svg`](dist/ukrmap-baked.svg) | colors baked on, 1600 px — for Figma, Keynote, Illustrator | 17.4 KB |
+| [`ukrmap-print.svg`](dist/ukrmap-print.svg) | 700 m detail, every river | 33.7 KB |
+| [`ukrmap-small.svg`](dist/ukrmap-small.svg) | coarsest of the three | 10.1 KB |
 | [`dist/regions/`](dist/regions/) | one SVG per region + `regions.json` | 67 KB raw |
 <!-- files:end -->
 
 The CLI is for what those do not cover:
 
 ```bash
-npx github:keymasterr/ukrmap --lang=en --water=all -o ua.svg
+npx github:keymasterr/ukrmap --lang=en --water=all -o ukrmap.svg
 ```
 
 **Not on npm yet**, so the commands here run it straight from the repository — `npx` clones and runs, nothing is installed. To have it as a dependency, clone and `npm link`, or point your `package.json` at `github:keymasterr/ukrmap`. When it does go to npm, every command below shortens to `npx ukrmap`.
@@ -58,10 +58,10 @@ Serve `dist/`, read `src/`. Both are in the package.
 ### 1 · A file and nothing else
 
 ```bash
-npx github:keymasterr/ukrmap -o ua.svg                                   # 25 regions, city labels
-npx github:keymasterr/ukrmap --water --detail=700 --lang=en -o ua.svg    # print quality, English
-npx github:keymasterr/ukrmap --labels=none --style=none -o ua.svg        # bare geometry, style it yourself
-npx github:keymasterr/ukrmap --kyiv-separate -o ua.svg                   # 26 regions, capital split out
+npx github:keymasterr/ukrmap -o ukrmap.svg                                   # 25 regions, city labels
+npx github:keymasterr/ukrmap --water --detail=700 --lang=en -o ukrmap.svg    # print quality, English
+npx github:keymasterr/ukrmap --labels=none --style=none -o ukrmap.svg        # bare geometry, style it yourself
+npx github:keymasterr/ukrmap --kyiv-separate -o ukrmap.svg                   # 26 regions, capital split out
 ```
 
 Opens in a browser, in Illustrator, in InDesign. `--list` prints the region keys.
@@ -69,7 +69,7 @@ Opens in a browser, in Illustrator, in InDesign. `--list` prints the region keys
 **Coloring from a table**, which is the job people actually have. Twenty-five `--fill` flags is how nobody uses a tool, so the table goes in a file:
 
 ```bash
-npx github:keymasterr/ukrmap --data values.json -o ua.svg
+npx github:keymasterr/ukrmap --data values.json -o ukrmap.svg
 ```
 
 ```json
@@ -100,7 +100,7 @@ require('fs').writeFileSync('values.json', JSON.stringify(out, null, 2));
 ```html
 <!-- as an image: simplest, but your CSS canNOT get in.
      No :hover, no recoloring. <title> tooltips still work. -->
-<img src="ua.svg" alt="Map of Ukraine" width="720">
+<img src="ukrmap.svg" alt="Map of Ukraine" width="720">
 
 <!-- inline: paste the file's contents into the markup.
      The only way :hover and data-driven color actually work. -->
@@ -113,7 +113,7 @@ require('fs').writeFileSync('values.json', JSON.stringify(out, null, 2));
 <svg class="ukr-map" viewBox="…">…</svg>
 
 <!-- <object>: styleable only by CSS inside the SVG -->
-<object data="ua.svg" type="image/svg+xml" width="720"></object>
+<object data="ukrmap.svg" type="image/svg+xml" width="720"></object>
 ```
 
 If you want interactivity, inline it — a one-line include in most template engines, or an SVG-as-component import in a bundled app.
@@ -421,7 +421,7 @@ pin.style.top  = p.top  + 'px';
 UkrMap.project(data, 30.5234, 50.4501);       // [x, y] in map units, no DOM
 ```
 
-**Longitude first, which is the opposite of how you have seen coordinates written.** Both orders are standard, in different worlds. People write latitude first — `50.4501, 30.5234` is what Google Maps shows you and what a phone puts on the clipboard. Data formats write longitude first, because it is the x of an x/y pair: GeoJSON, WKT, PostGIS, shapefiles, and `dist/ua-wgs84.geo.json` in this very package all do. This function returns an x and a y and reads a GeoJSON-shaped pair, so it follows the format rather than the phone. If you are pasting from a map, swap them.
+**Longitude first, which is the opposite of how you have seen coordinates written.** Both orders are standard, in different worlds. People write latitude first — `50.4501, 30.5234` is what Google Maps shows you and what a phone puts on the clipboard. Data formats write longitude first, because it is the x of an x/y pair: GeoJSON, WKT, PostGIS, shapefiles, and `dist/ukrmap-wgs84.geo.json` in this very package all do. This function returns an x and a y and reads a GeoJSON-shaped pair, so it follows the format rather than the phone. If you are pasting from a map, swap them.
 
 Getting it wrong is not silent: a swapped pair still lands inside the valid range for both, so it cannot be rejected, but anything far outside Ukraine logs a warning once saying so.
 
@@ -439,7 +439,7 @@ The geometry will be right for decades; the population estimates were already hi
 UkrMap.facts(data, UKR_FACTS);   // or pass facts: UKR_FACTS to UkrMap()
 ```
 
-`data/ua-facts.json` carries `asOf` and `source`, and without it `unit.area` is `null` rather than `0` — so you can tell "no figures loaded" from "genuinely zero". The CLI picks the file up on its own.
+`data/ukrmap-facts.json` carries `asOf` and `source`, and without it `unit.area` is `null` rather than `0` — so you can tell "no figures loaded" from "genuinely zero". The CLI picks the file up on its own.
 
 ### One SVG per region
 
@@ -479,18 +479,18 @@ Two things are different in a baked file, both because a design tool is not a br
 **Give a baked file a size.** Widths in map units are only right at one scale, and without `width` the file has no size of its own: Figma reads the viewBox and hands you a map ten thousand pixels wide, after which every resize is a decision about stroke weight — down one way and the borders vanish, down the other and they stay 7 px on an 800 px map. `--width` states the size and retunes the three pixel-pinned lines to match, so the file arrives ready:
 
 ```bash
-npx github:keymasterr/ukrmap --style=attrs --width=1600 -o ua.svg   # a layout
-npx github:keymasterr/ukrmap --style=attrs --width=3200 -o ua.svg   # print
+npx github:keymasterr/ukrmap --style=attrs --width=1600 -o ukrmap.svg   # a layout
+npx github:keymasterr/ukrmap --style=attrs --width=3200 -o ukrmap.svg   # print
 ```
 
-A border is 0.7 px at whatever size you name — 7 map units at 1016 px, 4.45 at 1600, 2.22 at 3200. [`dist/ua-flat.svg`](dist/ua-flat.svg) ships at 1600. Water is deliberately left out of this: those widths are cartographic — the Dnipro is as wide as the Dnipro — and they are meant to scale with the map.
+A border is 0.7 px at whatever size you name — 7 map units at 1016 px, 4.45 at 1600, 2.22 at 3200. [`dist/ukrmap-baked.svg`](dist/ukrmap-baked.svg) ships at 1600. Water is deliberately left out of this: those widths are cartographic — the Dnipro is as wide as the Dnipro — and they are meant to scale with the map.
 
 In Node, the same file exports the pure renderer:
 
 ```js
 const UkrMap = require('ukrmap');
-const data = require('ukrmap/data/ua-1400.json');
-fs.writeFileSync('ua.svg', UkrMap.render(data, { water: true }));
+const data = require('ukrmap/data/ukrmap-1400.json');
+fs.writeFileSync('ukrmap.svg', UkrMap.render(data, { water: true }));
 UkrMap.css();      // the default skin, if you want it in your own stylesheet
 ```
 
@@ -502,7 +502,7 @@ On a server — a bot posting a map every few minutes — render and rasterise:
 
 ```js
 const UkrMap = require('ukrmap');
-const data = require('ukrmap/data/ua-1400.json');
+const data = require('ukrmap/data/ukrmap-1400.json');
 const { Resvg } = require('@resvg/resvg-js');          // or sharp, or rsvg-convert
 
 const svg = UkrMap.render(data, { style: 'attrs', fills });
@@ -524,18 +524,18 @@ Labels are sized in map units, so they scale with the map: at 360 px wide a city
 
 ### Bringing your own tools
 
-`dist/ua-wgs84.geo.json` is the same geometry in lon/lat, simplified identically, with the names and ISO codes on each feature. `dist/ua-facts.csv` is the areas and populations as a plain table.
+`dist/ukrmap-wgs84.geo.json` is the same geometry in lon/lat, simplified identically, with the names and ISO codes on each feature. `dist/ukrmap-facts.csv` is the areas and populations as a plain table.
 
 ```python
 import geopandas as gpd, pandas as pd
-ua = gpd.read_file('dist/ua-wgs84.geo.json').set_index('key')
-ua = ua.join(pd.read_csv('dist/ua-facts.csv').set_index('key')[['area_km2', 'pop_k']])
+ua = gpd.read_file('dist/ukrmap-wgs84.geo.json').set_index('key')
+ua = ua.join(pd.read_csv('dist/ukrmap-facts.csv').set_index('key')[['area_km2', 'pop_k']])
 ua.assign(dens=ua.pop_k * 1000 / ua.area_km2).plot(column='dens', legend=True)
 ```
 
 ```r
-ua <- sf::read_sf("dist/ua-wgs84.geo.json")
-ua <- dplyr::left_join(ua, readr::read_csv("dist/ua-facts.csv"), by = "key")
+ua <- sf::read_sf("dist/ukrmap-wgs84.geo.json")
+ua <- dplyr::left_join(ua, readr::read_csv("dist/ukrmap-facts.csv"), by = "key")
 ```
 
 Note that the GeoJSON carries all 27 units — Kyiv City and Sevastopol are separate features there, because merging is a rendering decision and has no business in the data you take elsewhere.
@@ -693,7 +693,7 @@ ukrmap/
   src/ukrmap-unfold.js the map <-> grid animation, opt-in
                         src/ is the annotated original — read this one
   bin/ukrmap.js       CLI
-  data/ua-*.json      geometry, one file per detail level   (generated)
+  data/ukrmap-*.json      geometry, one file per detail level   (generated)
   demo/               the demo and how-to page              (generated)
   dist/               ready-made files, so nobody has to run a build
     ukrmap.js         src/ with the comments stripped — serve this one
@@ -710,7 +710,7 @@ ukrmap/
     demo.js           refresh demo/ from dist/
 ```
 
-`dist/ua-wgs84.geo.json` is the same geometry in lon/lat, simplified identically, for anyone bringing their own projection.
+`dist/ukrmap-wgs84.geo.json` is the same geometry in lon/lat, simplified identically, for anyone bringing their own projection.
 
 Known gaps: no per-district (raion) geometry, by design; the `region` label set is not offset-tuned the way `city` is, so `labels=both` collides in the crowded west; and the grid's gap is uniform between bounding *boxes*, which cannot make the gap between *shapes* uniform — tune `gapX`/`gapY` to taste.
 

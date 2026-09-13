@@ -3,7 +3,7 @@
  * ukrmap — emit a standalone SVG map of Ukraine's regions.
  *
  *   ukrmap                              default map to stdout
- *   ukrmap -o ua.svg                    …to a file
+ *   ukrmap -o ukrmap.svg                    …to a file
  *   ukrmap --water=all --labels=region  every river, region names
  *   ukrmap --detail=700 --lang=en       print-quality, English
  *   ukrmap --kyiv-separate              Kyiv City as its own region
@@ -219,7 +219,7 @@ if (opts.scale !== undefined && !(opts.scale > 0)) die('--scale must be a positi
 if (opts.width !== undefined && !(opts.width > 0)) die('--width must be a positive number');
 if (opts.pad !== undefined && !Number.isFinite(opts.pad)) die('--pad must be a number');
 
-const file = path.join(__dirname, '..', 'data', `ua-${opts.detail}.json`);
+const file = path.join(__dirname, '..', 'data', `ukrmap-${opts.detail}.json`);
 if (!fs.existsSync(file)) {
   process.stderr.write(`ukrmap: missing ${path.relative(process.cwd(), file)} — run build/geo.sh then build/pack.js\n`);
   process.exit(1);
@@ -227,7 +227,7 @@ if (!fs.existsSync(file)) {
 const data = JSON.parse(fs.readFileSync(file, 'utf8'));
 
 /* areas and populations live in their own dated file; load it if it is there */
-const factFile = path.join(__dirname, '..', 'data', 'ua-facts.json');
+const factFile = path.join(__dirname, '..', 'data', 'ukrmap-facts.json');
 if (fs.existsSync(factFile)) UkrMap.facts(data, JSON.parse(fs.readFileSync(factFile, 'utf8')));
 
 /* The table is applied after the geometry is in hand — its keys may be names,

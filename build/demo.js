@@ -14,13 +14,13 @@ const path = require('path');
 const HERE = path.join(__dirname, '..');
 const detail = Number(process.argv[2] || 1400);
 
-const json = fs.readFileSync(path.join(HERE, 'data', `ua-${detail}.json`), 'utf8');
+const json = fs.readFileSync(path.join(HERE, 'data', `ukrmap-${detail}.json`), 'utf8');
 const demo = path.join(HERE, 'demo');
 fs.mkdirSync(demo, { recursive: true });
 
 fs.writeFileSync(path.join(demo, 'data.js'), 'window.UKR_DATA = ' + json + ';\n');
 fs.writeFileSync(path.join(demo, 'facts.js'),
-  'window.UKR_FACTS = ' + fs.readFileSync(path.join(HERE, 'data', 'ua-facts.json'), 'utf8') + ';\n');
+  'window.UKR_FACTS = ' + fs.readFileSync(path.join(HERE, 'data', 'ukrmap-facts.json'), 'utf8') + ';\n');
 /* The demo serves what a user would serve — dist/, not src/ — so the page is a
    working sample of the shipped file and the sizes it quotes are the real ones.
    Run build/dist.js first; `npm run build` does. */
@@ -37,7 +37,7 @@ for (const f of ['ukrmap.js', 'ukrmap-unfold.js']) {
    the geometry changed. Measure it instead. */
 const zlib = require('zlib');
 const sizes = [700, 1400, 2800].map((d) => {
-  const file = path.join(HERE, 'data', `ua-${d}.json`);
+  const file = path.join(HERE, 'data', `ukrmap-${d}.json`);
   const buf = fs.readFileSync(file);
   const parsed = JSON.parse(buf);
   const points = parsed.arcs.split(';').reduce((s2, a) => s2 + (a.split(' ').length >> 1), 0);

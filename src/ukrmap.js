@@ -121,7 +121,7 @@
      where proportional ones are a mesh — but design tools ignore vector-effect
      and read 0.7 against a 10000-unit map, so a 1000 px import gets 0.07 px:
      nothing. The rivers were moved to map units when they vanished in
-     Illustrator; these three were left behind, and ua-flat.svg opened as a
+     Illustrator; these three were left behind, and ukrmap-baked.svg opened as a
      country with no internal boundaries. Same widths at 10 units per pixel, so
      the ratios stay as the browser draws them. */
   var WF = { seam: 13, border: 7, outline: 10 };

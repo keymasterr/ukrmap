@@ -336,12 +336,12 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + 'Кожна область несе свій код <span class="keep-together">ISO 3166-2</span>, тож таблиця з даними лягає на мапу без перекладача.',
       ship: 'Ця сторінка — і демо, і інструкція. Мапу нижче змонтовано компонентом: без нього не було б ні контролів, ні рядка з даними під нею — решту на ній робить сам файл. У проєкт ви берете або SVG-файл, або компонент на <span class="keep-together">{code} КБ (gzip)</span>.',
       mnFiles: '<b>Готові файли.</b> Якщо налаштовувати нічого не треба, беріть як є:<br>'
-        + '<a href="../dist/ua.svg">ua.svg</a> — типовий, для сайту<br>'
-        + '<a href="../dist/ua-blank.svg">ua-blank.svg</a> — сама геометрія<br>'
-        + '<a href="../dist/ua-flat.svg">ua-flat.svg</a> — кольори в атрибутах, 1600 px, для Figma й Keynote<br>'
-        + '<a href="../dist/ua-print.svg">ua-print.svg</a> — 700 , усі річки<br>'
-        + 'Дані окремо: <a href="../dist/ua-facts.json">ua-facts.json</a>, '
-        + '<a href="../dist/ua-wgs84.geo.json">ua-wgs84.geo.json</a>.',
+        + '<a href="../dist/ukrmap.svg">ukrmap.svg</a> — типовий, для сайту<br>'
+        + '<a href="../dist/ukrmap-blank.svg">ukrmap-blank.svg</a> — сама геометрія<br>'
+        + '<a href="../dist/ukrmap-baked.svg">ukrmap-baked.svg</a> — кольори в атрибутах, 1600 px, для Figma й Keynote<br>'
+        + '<a href="../dist/ukrmap-print.svg">ukrmap-print.svg</a> — 700 , усі річки<br>'
+        + 'Дані окремо: <a href="../dist/ukrmap-facts.json">ukrmap-facts.json</a>, '
+        + '<a href="../dist/ukrmap-wgs84.geo.json">ukrmap-wgs84.geo.json</a>.',
       caption: 'Геометрія: Natural Earth 10m admin-1, рівнокутна конічна проєкція Ламберта зі стандартними паралелями 44,5° і 52°, топологічне спрощення з інтервалом 1,4 км. Центри регіонів нанесено за справжніми координатами, а підписи розставлено вручну, щоб вони не виходили за межі регіону.',
       mnFold: '<b>Звідки ця мапа.</b> 2012 року вона була PNG-спрайтом із <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: контури для курсора обводилися вручну, зате по справжніх межах — <a href="https://keymasterr.com/micro/ukrmap/2012/">оригінал лежить поруч</a>. Реакція на справжню форму області — звідти, як і сітка: розкладання вийшло з тих самих плиток майже випадково і сподобалося настільки, що під нього варто було підібрати порядок — той, у якому області найменше перетинаються дорогою, три смуги із заходу на схід. Тут це здебільшого внутрішній жарт; якщо він і вам до смаку, це один додатковий файл, <code>ukrmap-unfold.js</code>.',
       mnSyvash: '<b>Сиваш і форма Криму.</b> У Natural Earth Сиваш лежить у шарі озер, тож адміністративні полігони накривають його як суходіл, і на дрібномасштабній мапі смуга між Херсонщиною і Кримом виходить суцільною. Збірка виносить лагуни — Сиваш і Дністровський лиман — в окремий шар і вирізає їх із суходолу ще до проєктування.',
@@ -350,11 +350,11 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
       h3file: '1 · Просто файл',
       pfile: '<b>Мапа вгорі — це і є файл.</b> Налаштуйте її (мова, підписи, вода, Київ, палітра) і натисніть <b>зберегти</b>. <b>SVG</b> (1600 px, кольори в атрибутах) — для Illustrator, Figma чи друку; <b>PNG</b> (2400 px) — для Word, Google Презентацій, Telegram і всього, що не підтримує SVG. Нічого встановлювати не треба.',
       pfile2: 'Те саме можна зробити з термінала, наприклад у скрипті збірки чи в боті, що щогодини перемальовує мапу. Усі прапорці описано в README: рівні деталізації для <code>--detail</code> — у таблиці внизу, а інший розмір файлу задає <code>--width</code>.',
-      prefile: 'npx github:keymasterr/ukrmap -o ua.svg\n\n'
+      prefile: 'npx github:keymasterr/ukrmap -o ukrmap.svg\n\n'
         + '<span class="c"># розфарбувати за таблицею: {"UA-46": "#c0392b", …}</span>\n'
-        + 'npx github:keymasterr/ukrmap --data values.json -o ua.svg\n\n'
+        + 'npx github:keymasterr/ukrmap --data values.json -o ukrmap.svg\n\n'
         + '<span class="c"># своя палітра — ті самі ключі, що й CSS-змінні</span>\n'
-        + 'npx github:keymasterr/ukrmap --palette land=#e7e3d6,water=#5891b6 -o ua.svg',
+        + 'npx github:keymasterr/ukrmap --palette land=#e7e3d6,water=#5891b6 -o ukrmap.svg',
       h3embed: '2 · Вставити на сторінку',
       h3css: '3 · Інтерактивно, і все ще без JavaScript',
       pcss: 'Кожен регіон має код ISO 3166-2 в <code>data-key</code> і назву в '
@@ -401,12 +401,12 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + 'Тепер важливо, <i>як</i> ви його вставите: від цього залежить, чи працюватиме ваш CSS:',
       preembed: '<span class="c">&lt;!-- 1. як картинка: найпростіше, але ваш CSS туди <i>не</i> дістає.</span>\n'
         + '<span class="c">     Ні :hover, ні перефарбування. Підказки з &lt;title&gt; працюють. --&gt;</span>\n'
-        + '&lt;img src="ua.svg" alt="Мапа України" width="720"&gt;\n\n'
+        + '&lt;img src="ukrmap.svg" alt="Мапа України" width="720"&gt;\n\n'
         + '<span class="c">&lt;!-- 2. інлайном: вставте вміст файлу просто в розмітку.</span>\n'
         + '<span class="c">     Тільки так працюють :hover і колір за даними — крок 3. --&gt;</span>\n'
-        + '&lt;svg class="ukr-map" viewBox="…"&gt;…&lt;/svg&gt;   <span class="c">&lt;!-- вміст ua.svg --&gt;</span>\n\n'
+        + '&lt;svg class="ukr-map" viewBox="…"&gt;…&lt;/svg&gt;   <span class="c">&lt;!-- вміст ukrmap.svg --&gt;</span>\n\n'
         + '<span class="c">&lt;!-- 3. &lt;object&gt;: стилізується лише тим CSS, що всередині SVG --&gt;</span>\n'
-        + '&lt;object data="ua.svg" type="image/svg+xml" width="720"&gt;&lt;/object&gt;',
+        + '&lt;object data="ukrmap.svg" type="image/svg+xml" width="720"&gt;&lt;/object&gt;',
       pembed2: 'Коротко: <b>потрібна інтерактивність — вставляйте інлайном.</b> '
         + 'У більшості шаблонізаторів вставити SVG інлайном можна одним include, а в застосунках із бандлером те саме робить імпорт SVG як компонента.',
 
@@ -423,7 +423,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '.m-alert { --c: #c4302b; animation: pulse 1.5s infinite }',
 
       h2export: 'Приклад: карта за даними',
-      pexport: 'Щільність населення — з того самого <code>ua-facts.json</code>, що вже лежить у пакеті. '
+      pexport: 'Щільність населення — з того самого <code>ukrmap-facts.json</code>, що вже лежить у пакеті. '
         + '<code>UkrMap.colorData()</code> сам бере діапазон із даних. Тут — логарифмічно, бо '
         + 'щільність величина мультиплікативна: Київ у 20 разів щільніший за область, і '
         + 'шкала має це показувати, а не рівняти всіх у ряд. Далі <code>set()</code> ставить '
@@ -483,12 +483,12 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + 'Every region carries its <span class="keep-together">ISO 3166-2</span> code, so a table of data lands on the map without a translation step.',
       ship: 'This page is both a demo and a how-to. The map below is mounted by the component: without it there would be no controls and no readout. Everything else you see is the file. What you ship is that SVG, or the <span class="keep-together">{code} KB</span> gzipped component.',
       mnFiles: '<b>Ready-made files.</b> If there is nothing to set up, take one as it is:<br>'
-        + '<a href="../dist/ua-en.svg">ua-en.svg</a> — the default, for the web<br>'
-        + '<a href="../dist/ua-blank.svg">ua-blank.svg</a> — geometry only, no labels<br>'
-        + '<a href="../dist/ua-flat-en.svg">ua-flat-en.svg</a> — colors in attributes, 1600 px, for Figma and Keynote<br>'
-        + '<a href="../dist/ua-print.svg">ua-print.svg</a> — 700 m, every river (Ukrainian labels)<br>'
-        + 'Data separately: <a href="../dist/ua-facts.json">ua-facts.json</a>, '
-        + '<a href="../dist/ua-wgs84.geo.json">ua-wgs84.geo.json</a>.',
+        + '<a href="../dist/ukrmap-en.svg">ukrmap-en.svg</a> — the default, for the web<br>'
+        + '<a href="../dist/ukrmap-blank.svg">ukrmap-blank.svg</a> — geometry only, no labels<br>'
+        + '<a href="../dist/ukrmap-baked-en.svg">ukrmap-baked-en.svg</a> — colors in attributes, 1600 px, for Figma and Keynote<br>'
+        + '<a href="../dist/ukrmap-print.svg">ukrmap-print.svg</a> — 700 m, every river (Ukrainian labels)<br>'
+        + 'Data separately: <a href="../dist/ukrmap-facts.json">ukrmap-facts.json</a>, '
+        + '<a href="../dist/ukrmap-wgs84.geo.json">ukrmap-wgs84.geo.json</a>.',
       caption: 'Geometry: Natural Earth 10m admin-1, Lambert Conformal Conic with standard parallels at 44.5° and 52°, simplified as a topology at a 1.4 km interval. Administrative centers are at their true projected coordinates; each label is placed by hand to stay inside its region.',
       mnFold: '<b>Where this map comes from.</b> In 2012 it was a PNG sprite with <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: the hit areas were traced by hand, but they followed the real borders — <a href="https://keymasterr.com/micro/ukrmap/2012/">the original is still next door</a>. Hover on the true shape of a region survived from there, and so did the grid: the unfolding fell out of those same tiles almost by accident, and it was good enough to be worth choosing an order for — the one where regions cross each other least on the way, three bands west to east. Here it is mostly an in-joke; if it is your kind of joke, it is one extra file, <code>ukrmap-unfold.js</code>.',
       mnSyvash: '<b>The Syvash, and the shape of Crimea.</b> Natural Earth files the Syvash with the lakes, so the administrative polygons cover it as land, and on a small-scale map the strip between Kherson and Crimea comes out solid. The build pulls the lagoons — the Syvash and the Dniester Liman — into a layer of their own and erases them from the land before projecting.',
@@ -497,11 +497,11 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
       h3file: '1 · Just the file',
       pfile: '<b>The map above is the file.</b> Set it up (language, labels, water, Kyiv, palette) and press <b>save</b>. <b>SVG</b> at 1600 px with the colors in attributes — for Illustrator, Figma or print; <b>PNG</b> at 2400 px for Word, Google Slides, Telegram and anything else that doesn’t support SVG. Nothing to install.',
       pfile2: 'The same works from a terminal, for a build step or a bot that redraws the map every hour. All the flags are in the README: the levels for <code>--detail</code> are in the table further down, and <code>--width</code> asks for a different size.',
-      prefile: 'npx github:keymasterr/ukrmap -o ua.svg\n\n'
+      prefile: 'npx github:keymasterr/ukrmap -o ukrmap.svg\n\n'
         + '<span class="c"># color it from a table: {"UA-46": "#c0392b", …}</span>\n'
-        + 'npx github:keymasterr/ukrmap --data values.json -o ua.svg\n\n'
+        + 'npx github:keymasterr/ukrmap --data values.json -o ukrmap.svg\n\n'
         + '<span class="c"># your own palette — the same keys as the CSS custom properties</span>\n'
-        + 'npx github:keymasterr/ukrmap --palette land=#e7e3d6,water=#5891b6 -o ua.svg',
+        + 'npx github:keymasterr/ukrmap --palette land=#e7e3d6,water=#5891b6 -o ukrmap.svg',
       h3embed: '2 · Put it on a page',
       h3css: '3 · Interactive, still no JavaScript',
       pcss: 'Every region carries its <span class="keep-together">ISO 3166-2</span> code in <code>data-key</code> and its name in a <code>&lt;title&gt;</code>. From there your stylesheet does the rest: a region’s color is one custom property, <code>--c</code>.',
@@ -547,12 +547,12 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + 'What matters next is <i>how</i> you embed it, because that decides whether your CSS can reach it:',
       preembed: '<span class="c">&lt;!-- 1. as an image: simplest, but your CSS can’t reach inside.</span>\n'
         + '<span class="c">     No :hover, no recoloring. &lt;title&gt; tooltips still work. --&gt;</span>\n'
-        + '&lt;img src="ua.svg" alt="Map of Ukraine" width="720"&gt;\n\n'
+        + '&lt;img src="ukrmap.svg" alt="Map of Ukraine" width="720"&gt;\n\n'
         + '<span class="c">&lt;!-- 2. inline: paste the file’s contents straight into the markup.</span>\n'
         + '<span class="c">     The only way :hover and data-driven color work — step 3. --&gt;</span>\n'
-        + '&lt;svg class="ukr-map" viewBox="…"&gt;…&lt;/svg&gt;   <span class="c">&lt;!-- ua.svg contents --&gt;</span>\n\n'
+        + '&lt;svg class="ukr-map" viewBox="…"&gt;…&lt;/svg&gt;   <span class="c">&lt;!-- ukrmap.svg contents --&gt;</span>\n\n'
         + '<span class="c">&lt;!-- 3. &lt;object&gt;: styleable only by CSS inside the SVG --&gt;</span>\n'
-        + '&lt;object data="ua.svg" type="image/svg+xml" width="720"&gt;&lt;/object&gt;',
+        + '&lt;object data="ukrmap.svg" type="image/svg+xml" width="720"&gt;&lt;/object&gt;',
       pembed2: 'In short: <b>if you want interactivity, inline it.</b> In most template engines that is a one-line include; in a bundled app, importing the SVG as a component does the same.',
 
       h2alerts: 'Recipe: live air-raid alerts',
@@ -568,7 +568,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '.m-alert { --c: #c4302b; animation: pulse 1.5s infinite }',
 
       h2export: 'Recipe: a map of a number',
-      pexport: 'Population density, from the same <code>ua-facts.json</code> that already ships with '
+      pexport: 'Population density, from the same <code>ukrmap-facts.json</code> that already ships with '
         + '<code>UkrMap.colorData()</code> reads the range off the data — logarithmically here, '
         + 'because density is a multiplicative quantity: Kyiv is twenty times denser than '
         + 'its oblast, and the scale should say so rather than level everyone into a queue. '
@@ -1012,7 +1012,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
 
   function currentName(ext) {
     var o = currentOptions();
-    return ['ukraine', o.lang, o.labels === 'none' ? 'blank' : o.labels]
+    return ['ukrmap', o.lang, o.labels === 'none' ? 'blank' : o.labels]
       .concat(o.kyivSeparate ? ['kyiv'] : [])
       .concat(skin === 'paper' ? [] : [skin]).join('-') + '.' + ext;
   }

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
- * build/cache/*.json  ->  data/ua-<detail>.json
+ * build/cache/*.json  ->  data/ukrmap-<detail>.json
  *
  *   node build/pack.js
  *
@@ -473,7 +473,7 @@ for (const detail of LEVELS) {
     src: `Natural Earth 10m admin-1 · LCC (lat_1=44.5 lat_2=52 lon_0=31.5) · Visvalingam ${detail} m · water pre-2023`,
   };
 
-  const dest = path.join(HERE, 'data', `ua-${detail}.json`);
+  const dest = path.join(HERE, 'data', `ukrmap-${detail}.json`);
   fs.writeFileSync(dest, JSON.stringify(out));
   const zlib = require('zlib');
   const raw = fs.statSync(dest).size;
@@ -509,9 +509,9 @@ const facts = {
   units: {},
 };
 for (const u of UNITS) facts.units[u.k] = { area: u.area, pop: u.pop };
-const factFile = path.join(HERE, 'data', 'ua-facts.json');
+const factFile = path.join(HERE, 'data', 'ukrmap-facts.json');
 fs.writeFileSync(factFile, JSON.stringify(facts, null, 1) + '\n');
-console.log(`data/ua-facts.json  ${(fs.statSync(factFile).size / 1024).toFixed(1)} KB  `
+console.log(`data/ukrmap-facts.json  ${(fs.statSync(factFile).size / 1024).toFixed(1)} KB  `
   + `(areas + populations, ${Object.keys(facts.units).length} units)`);
 
 console.table(report);
