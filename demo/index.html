@@ -137,6 +137,11 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
                      var(--ukr-ease, cubic-bezier(.62,0,.28,1)); }
   #fold .ukr-borders, #fold .ukr-outline, #fold .ukr-coast,
   #fold .ukr-coastglow, #fold .ukr-water { transition: opacity .34s linear; }
+  /* the same shortening the plugin does on the way home, so the furniture is
+     back before the tiles give up their own outlines */
+  #fold .is-moving > .ukr-borders, #fold .is-moving > .ukr-outline,
+  #fold .is-moving > .ukr-coast, #fold .is-moving > .ukr-coastglow,
+  #fold .is-moving > .ukr-water { transition-duration: .2s; }
   #fold .ukr-tilewater, #fold .ukr-tilecoast, #fold .ukr-tileglow {
     transition: opacity .25s linear; }
 }
@@ -235,8 +240,6 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
   <figcaption data-t="caption"></figcaption>
 </figure>
 
-<p class="mn" data-t="mnOrigin"></p>
-
 <h2 data-t="h2use"></h2>
 
 <h3 data-t="h3file"></h3>
@@ -331,8 +334,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + 'Кожна область несе свій код <span class="keep-together">ISO 3166-2</span>, тож таблиця з даними лягає на мапу без перекладача.',
       ship: 'Ця сторінка — і демо, і інструкція. Мапу нижче змонтовано компонентом: без нього не було б ні контролів, ні рядка з даними під нею — решту на ній робить сам файл. У проєкт ви берете або SVG-файл, або компонент на <span class="keep-together">{code} КБ (gzip)</span>.',
       caption: 'Геометрія: Natural Earth 10m admin-1, рівнокутна конічна проєкція Ламберта зі стандартними паралелями 44,5° і 52°, топологічне спрощення з інтервалом 1,4 км. Центри регіонів нанесено за справжніми координатами, а підписи розставлено вручну, щоб вони не виходили за межі регіону.',
-      mnOrigin: '<b>Звідки ця мапа.</b> 2012 року вона була PNG-спрайтом із <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: контури для курсора обводилися вручну, зате по справжніх межах — <a href="https://keymasterr.com/micro/ukrmap/2012/">оригінал лежить поруч</a>. Реакція на справжню форму області — звідти; усе інше відтоді переписано.',
-      mnFold: '<b>Сітка — теж зі спадку.</b> Розкладання вийшло з тих самих плиток майже випадково і сподобалося настільки, що під нього варто було підібрати порядок: той, у якому області найменше перетинаються дорогою — три смуги із заходу на схід. Тут це здебільшого внутрішній жарт; якщо він і вам до смаку, це один додатковий файл, <code>ukrmap-unfold.js</code>.',
+      mnFold: '<b>Звідки ця мапа.</b> 2012 року вона була PNG-спрайтом із <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: контури для курсора обводилися вручну, зате по справжніх межах — <a href="https://keymasterr.com/micro/ukrmap/2012/">оригінал лежить поруч</a>. Реакція на справжню форму області — звідти, як і сітка: розкладання вийшло з тих самих плиток майже випадково і сподобалося настільки, що під нього варто було підібрати порядок — той, у якому області найменше перетинаються дорогою, три смуги із заходу на схід. Тут це здебільшого внутрішній жарт; якщо він і вам до смаку, це один додатковий файл, <code>ukrmap-unfold.js</code>.',
       mnSyvash: '<b>Чому Крим тримається на двох перешийках.</b> У Natural Earth Сиваш лежить у шарі озер, тож адміністративні полігони накривають його як суходіл, і на дрібномасштабній мапі смуга між Херсонщиною і Кримом виходить суцільною. Збірка виносить лагуни — Сиваш і Дністровський лиман — в окремий шар і вирізає їх із суходолу ще до проєктування. Звідси й форма: Перекоп на заході, Арабатська стрілка на сході, лагуна між ними.',
       mnFont: '<b>Шрифт до компонента не входить.</b> Підписи беруть шрифт із <code>--ukr-font</code>, а без нього — вузький системний. Ця сторінка завантажує Ubuntu Condensed: зсуви підписів підібрано саме під нього.',
       h2use: 'Як користуватися',
@@ -476,8 +478,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + 'Every region carries its <span class="keep-together">ISO 3166-2</span> code, so a table of data lands on the map without a translation step.',
       ship: 'This page is both a demo and a how-to. The map below is mounted by the component: without it there would be no controls and no readout. Everything else you see is the file. What you ship is that SVG, or the <span class="keep-together">{code} KB</span> gzipped component.',
       caption: 'Geometry: Natural Earth 10m admin-1, Lambert Conformal Conic with standard parallels at 44.5° and 52°, simplified as a topology at a 1.4 km interval. Administrative centers are at their true projected coordinates; each label is placed by hand to stay inside its region.',
-      mnOrigin: '<b>Where this map comes from.</b> In 2012 it was a PNG sprite with <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: the hit areas were traced by hand, but they followed the real borders — <a href="https://keymasterr.com/micro/ukrmap/2012/">the original is still next door</a>. Hover on the true shape of a region is what survived; everything else has been rewritten since.',
-      mnFold: '<b>The grid is inherited too.</b> The unfolding fell out of those same tiles almost by accident, and it was good enough to be worth choosing an order for: the one where regions cross each other least on the way — three bands, west to east. Here it is mostly an in-joke; if it is your kind of joke, it is one extra file, <code>ukrmap-unfold.js</code>.',
+      mnFold: '<b>Where this map comes from.</b> In 2012 it was a PNG sprite with <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: the hit areas were traced by hand, but they followed the real borders — <a href="https://keymasterr.com/micro/ukrmap/2012/">the original is still next door</a>. Hover on the true shape of a region survived from there, and so did the grid: the unfolding fell out of those same tiles almost by accident, and it was good enough to be worth choosing an order for — the one where regions cross each other least on the way, three bands west to east. Here it is mostly an in-joke; if it is your kind of joke, it is one extra file, <code>ukrmap-unfold.js</code>.',
       mnSyvash: '<b>Why Crimea hangs on two necks.</b> Natural Earth files the Syvash with the lakes, so the administrative polygons cover it as land, and on a small-scale map the strip between Kherson and Crimea comes out solid. The build pulls the lagoons — the Syvash and the Dniester Liman — into a layer of their own and erases them from the land before projecting. Hence the shape: the Perekop neck in the west, the Arabat Spit in the east, lagoon in between.',
       mnFont: '<b>The component doesn’t ship a font.</b> Labels ask for <code>--ukr-font</code> and fall back to a condensed system stack. This page loads Ubuntu Condensed, the font the hand-tuned label offsets were measured against.',
       h2use: 'Using it',
@@ -1093,6 +1094,17 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
     data: window.UKR_DATA, labels: 'none', water: true, lang: lang, titles: false,
   });
   UkrMap.unfold(foldMap);
+  /* The stage animates its height between the two views, and in a margin note
+     that means the paragraph under it hops twice per press. The box reserves
+     the taller one for good: the viewBox already covers both, so its ratio is
+     the height to hold. */
+  var foldBox = document.getElementById('fold');
+  var holdFoldHeight = function () {
+    var vb = foldMap.svg.viewBox.baseVal;
+    foldBox.style.aspectRatio = vb.width + ' / ' + vb.height;
+  };
+  holdFoldHeight();
+  window.addEventListener('resize', holdFoldHeight);
   document.getElementById('foldToggle').onclick = function () {
     unfolded = !unfolded;
     foldMap.view(unfolded ? 'grid' : 'map');

@@ -83,12 +83,23 @@
          the <svg>, the per-tile copies below carry the same classes so they
          inherit color and weight, and only these must fade out. */
       SHARED.replace(/§/g, '.' + p) + '{transition:opacity .34s linear}' +
+      /* Coming home the furniture has to be back before the tile outlines go,
+         and `is-moving` outlasts `is-unfolded` by 240 ms — so inside that
+         window the fade is shorter than the window. Declared BEFORE the
+         is-unfolded rule below, which has the same specificity and must win
+         while both classes are on: going out, the furniture still leaves in
+         90 ms. */
+      SHARED.replace(/§/g, '.' + p + 'map.is-moving>.' + p) +
+        '{transition-duration:.2s}' +
       SHARED.replace(/§/g, '.' + p + 'map.is-unfolded>.' + p) +
         '{opacity:0;transition-duration:.09s}' +
 
       /* Each tile's own outline takes over from the shared border layer, at the
-         same width, so no line thickens or thins as the view changes. */
-      '.' + p + 'map.is-unfolded .' + p + 'region{stroke:var(--' + p + 'line);stroke-width:.7}' +
+         same width, so no line thickens or thins as the view changes. It is
+         held through `is-moving` as well: the two are the same line in the same
+         color, so an overlap is invisible where a gap is not. */
+      '.' + p + 'map.is-unfolded .' + p + 'region,' +
+      '.' + p + 'map.is-moving .' + p + 'region{stroke:var(--' + p + 'line);stroke-width:.7}' +
 
       /* A tile's own water and shore. Hidden while assembled (the shared
          layers cover them exactly) and while moving (re-applying 25 clip paths

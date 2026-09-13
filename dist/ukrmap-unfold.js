@@ -22,9 +22,12 @@
       '.' + p + 'unit{transition:transform var(--' + p + 'dur,.5s) ' +
         'var(--' + p + 'ease,cubic-bezier(.62,0,.28,1));will-change:transform}' +
       SHARED.replace(/§/g, '.' + p) + '{transition:opacity .34s linear}' +
+      SHARED.replace(/§/g, '.' + p + 'map.is-moving>.' + p) +
+        '{transition-duration:.2s}' +
       SHARED.replace(/§/g, '.' + p + 'map.is-unfolded>.' + p) +
         '{opacity:0;transition-duration:.09s}' +
-      '.' + p + 'map.is-unfolded .' + p + 'region{stroke:var(--' + p + 'line);stroke-width:.7}' +
+      '.' + p + 'map.is-unfolded .' + p + 'region,' +
+      '.' + p + 'map.is-moving .' + p + 'region{stroke:var(--' + p + 'line);stroke-width:.7}' +
       '.' + p + 'tilewater,.' + p + 'tilecoast,.' + p + 'tileglow{' +
         'opacity:0;pointer-events:none;transition:opacity .25s linear}' +
       '.' + p + 'map.w-on.is-unfolded:not(.is-moving) .' + p + 'tilewater,' +

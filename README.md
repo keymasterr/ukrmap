@@ -38,7 +38,7 @@ From a clone, the demo and the files are two commands: `npm run build` writes `d
 | geometry, `--detail=2800` | 20.4 KB | 8.9 KB |
 | areas + populations (separate) | 1.7 KB | 0.5 KB |
 | `dist/ukrmap.js` — the component, optional | 52.4 KB | 14.8 KB |
-| `dist/ukrmap-unfold.js` — opt-in on top | 10.5 KB | 3.1 KB |
+| `dist/ukrmap-unfold.js` — opt-in on top | 10.7 KB | 3.2 KB |
 | `src/ukrmap.js` — the same code, annotated | 91.2 KB | 30.1 KB |
 | emitted SVG, default | 56.1 KB | 16.8 KB |
 <!-- sizes:end -->

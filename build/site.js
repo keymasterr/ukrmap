@@ -60,6 +60,11 @@ fs.mkdirSync(SITE, { recursive: true });
 need(path.join(HERE, 'demo', 'data.js'), 'demo/data.js — run `npm run build`');
 let page = fs.readFileSync(path.join(HERE, 'demo', 'index.html'), 'utf8');
 page = page.split('../dist/').join('files/');
+
+/* Analytics belongs to the site, not to the project: a clone of the repository
+   should not phone anybody's home. The tag lives at the site root and is added
+   to the copy that goes there. */
+page = page.replace('</head>', '<script async src="/gtag.js"></script>\n</head>');
 fs.writeFileSync(path.join(SITE, 'index.html'), page);
 
 for (const f of ['ukrmap.js', 'ukrmap-unfold.js', 'data.js', 'facts.js', 'sizes.js']) {
