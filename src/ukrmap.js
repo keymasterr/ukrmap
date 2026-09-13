@@ -174,7 +174,7 @@
     var m = String(h).trim().replace(/^#/, '');
     if (m.length === 3) m = m[0] + m[0] + m[1] + m[1] + m[2] + m[2];
     if (!/^[0-9a-fA-F]{6}$/.test(m)) {
-      throw new Error('ukrmap: scale() takes hex colors, got "' + h + '"');
+      throw new Error('ukrmap: colorData() takes hex colors, got "' + h + '"');
     }
     return [parseInt(m.slice(0, 2), 16), parseInt(m.slice(2, 4), 16), parseInt(m.slice(4, 6), 16)];
   }
@@ -242,9 +242,9 @@
     if (typeof console !== 'undefined' && console.warn) console.warn('ukrmap: ' + msg);
   }
 
-  function scaleOf(values, options) {
+  function colorData(values, options) {
     var o = options || {};
-    var at = ramp(o.colors || o.colours || RAMP);   /* the old British key still answers */
+    var at = ramp(o.colors || RAMP);
     var keys = [], nums = [], k;
     for (k in (values || {})) {
       /* A gap in the table is not a zero. Number(null) is 0 and Number('') is
@@ -322,7 +322,7 @@
        zero, which a count or a percentage change is not. */
     var mode = o.spread || (o.domain ? 'linear' : 'rank');
     if (mode === 'log' && !(lo > 0)) {
-      warnOnce('scale(): log needs every value above zero, and the smallest here is '
+      warnOnce('colorData(): log needs every value above zero, and the smallest here is '
         + lo + ' — falling back to linear');
       mode = 'linear';
     }
@@ -381,6 +381,12 @@
     return {
       fills: fills, domain: [lo, hi], breaks: breaks,
       at: at, of: of, valueAt: valueAt,
+      /* valueAt() read backwards: where a value sits on the ramp, 0 to 1. A
+         legend that wants to mark a real value — the median, or every row in
+         the table — cannot work it out from the outside without redoing the
+         spread, and a legend that redoes the spread is one that can disagree
+         with the map it explains. */
+      posOf: function (v) { return isFinite(v) ? where(v) : null; },
     };
   };
 
@@ -1873,7 +1879,7 @@
          a long press and by a screen reader without this project owning a
          tooltip layer. Pass null to put the region names back.
 
-           map.set({ 'UA-46': scale(v) }).title({ 'UA-46': 'Львівська: ' + v + ' %' }); */
+           map.set({ 'UA-46': colorData(v) }).title({ 'UA-46': 'Львівська: ' + v + ' %' }); */
       title: function (values) { titles = values || null; paintText(); return this; },
 
       /* Where a coordinate lands: {x, y} in map units, and {left, top} in CSS
@@ -1971,15 +1977,14 @@
       toward: function (key, dx, dy) { return toward(data, g, nbrs, key, dx, dy); },
     };
   };
-  /* The spelling of these two changed to American; the old names still answer,
-     because a rename is not a reason to break someone's page. */
-  mount.neighbours = mount.neighbors;
-
   /* [x, y] in map units — the same space the paths and u.c centers are in, so
      it composes with everything else here and needs no DOM. */
   mount.project = function (data, lon, lat) { return projector(data)(lon, lat); };
-  /* numbers -> colors; the implementation sits with its OKLab helpers above */
-  mount.scale = scaleOf;
+  /* numbers -> colors; the implementation sits with its OKLab helpers above.
+     Not `scale`: that word is already taken here for pixels per 1000 map units
+     (regionSvg's option, the CLI's --scale), and one name for two unrelated
+     things is a name that has to be explained every time. */
+  mount.colorData = colorData;
   mount.palette = function () {
     var c = {}, k;
     for (k in PALETTE) c[k] = PALETTE[k];

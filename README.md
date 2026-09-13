@@ -39,7 +39,7 @@ From a clone, the demo and the files are two commands: `npm run build` writes `d
 | areas + populations (separate) | 1.7 KB | 0.5 KB |
 | `dist/ukrmap.js` — the component, optional | 52.4 KB | 14.8 KB |
 | `dist/ukrmap-unfold.js` — opt-in on top | 10.5 KB | 3.1 KB |
-| `src/ukrmap.js` — the same code, annotated | 90.8 KB | 30.0 KB |
+| `src/ukrmap.js` — the same code, annotated | 91.2 KB | 30.1 KB |
 | emitted SVG, default | 56.1 KB | 16.8 KB |
 <!-- sizes:end -->
 
@@ -85,7 +85,7 @@ A bare string is a fill. `title` replaces that region's tooltip, so the **value 
 Building that file from a table of numbers is one call — see [Color by number](#color-by-number):
 
 ```js
-const { fills } = UkrMap.scale(values);
+const { fills } = UkrMap.colorData(values);
 const out = {};
 for (const key in fills) out[key] = { fill: fills[key], title: `${names[key]}: ${values[key]} %` };
 require('fs').writeFileSync('values.json', JSON.stringify(out, null, 2));
@@ -283,17 +283,18 @@ Anything missing from the table keeps its region name, so a partial table is a p
 
 ### Color by number
 
-Picking thresholds by hand is the tedious half of a choropleth, and the half that goes wrong: you have to read the range off the data, decide the breaks, and interpolate between colors. `scale()` does all three and hands back plain hex.
+Picking thresholds by hand is the tedious half of a choropleth, and the half that goes wrong: you have to read the range off the data, decide the breaks, and interpolate between colors. `colorData()` does all three and hands back plain hex.
 
 ```js
 const dens = { 'UA-30': 3518, 'UA-14': 153, 'UA-46': 113, /* … */ };
 
-const s = UkrMap.scale(dens);
+const s = UkrMap.colorData(dens);
 map.set(s.fills);            // {'UA-30': '#7f2d1e', …}
 s.domain                     // [30, 3518] — read off the data
 s.at(0.5)                    // the color at the ramp's midpoint
 s.valueAt(0.5)               // 62 — the value there, for labelling a legend
 s.of(120)                    // the color any value would get
+s.posOf(120)                 // 0…1 — where that value sits, for a legend mark
 ```
 
 | | |
@@ -320,7 +321,7 @@ It needs every value above zero — a count, a percentage change or a net figure
 **Cap the domain to give the rest of the field more room.** One genuine outlier still takes the top of any ramp that ends at it; `domain` ends the ramp earlier and lets the outlier clamp there:
 
 ```js
-UkrMap.scale(dens, { spread: 'log', domain: [30, 400] });
+UkrMap.colorData(dens, { spread: 'log', domain: [30, 400] });
 ```
 
 On the density table that moves the other twenty-five regions from 92 units of color to 141, with Kyiv alone in the top swatch. Say so in the legend — a clamped scale that does not admit it is a scale that lies about its top end.
@@ -375,10 +376,10 @@ Browsers without `color-mix` fall back to the gray line. Baked files (`style: 'a
 
 ### A legend
 
-The project does not build one, because a legend is HTML and yours will not look like mine. But `scale()` hands back everything it needs, so it cannot drift from the map it explains:
+The project does not build one, because a legend is HTML and yours will not look like mine. But `colorData()` hands back everything it needs, so it cannot drift from the map it explains:
 
 ```js
-const s = UkrMap.scale(values, { steps: 5 });       // classed: one swatch per class
+const s = UkrMap.colorData(values, { steps: 5 });       // classed: one swatch per class
 const edges = [s.domain[0], ...s.breaks, s.domain[1]];
 
 legend.innerHTML = s.breaks.map((_, i) =>
@@ -386,13 +387,19 @@ legend.innerHTML = s.breaks.map((_, i) =>
 ).join('');
 ```
 
-For the continuous default, draw a gradient bar and label it with `valueAt()` — since position is rank, the labels come out as the quartiles of your data:
+For the continuous default, draw a gradient bar and label the two ends. Anything in between is better marked than labelled: `posOf()` is the scale read backwards, so a tick for a real value lands exactly under its own color, and a row of them shows the distribution the ramp is answering to — which is the argument for `log` or `rank` made visible rather than asserted:
 
 ```js
-const s = UkrMap.scale(values);
+const s = UkrMap.colorData(values, { spread: 'log' });
 bar.style.background = `linear-gradient(90deg, ${[0, .25, .5, .75, 1].map(s.at)})`;
-ticks.textContent = [0, .25, .5, .75, 1].map((t) => Math.round(s.valueAt(t))).join('  ');
+
+for (const v of Object.values(values)) {           // one hairline per row
+  const tick = bar.appendChild(document.createElement('i'));
+  tick.style.left = s.posOf(v) * 100 + '%';
+}
 ```
+
+`valueAt()` is the other direction — the value at a position — for when you do want a number partway along. On a rank scale those are the quantiles of your data; on `log` or `linear` the midpoint of the bar is not the middle of the data, so a number printed there will claim more than it means.
 
 ```css
 .legend { display: flex; gap: 1rem; list-style: none; padding: 0 }
@@ -604,8 +611,6 @@ const nav = UkrMap.neighbors(data, { kyivSeparate: true });
 nav.of('UA-46');              // { 'UA-26': 1314, 'UA-07': 789, … } shared border, map units
 nav.toward('UA-46', 0, 1);    // 'UA-26' — one step down
 ```
-
-Spelling throughout is American. `UkrMap.neighbours()` and `scale(values, { colours })` still answer to their old spelling, because a rename is not a reason to break someone's page.
 
 **Nothing ever scales between views.** The viewBox width is fixed, so the on-screen scale is fixed too: a region is exactly the same size in the map and in the grid. Switching views is a pure translation per region, plus one translation of the whole scene to center the map in the wider box. The grid runs taller than the map, and only the container's height animates.
 

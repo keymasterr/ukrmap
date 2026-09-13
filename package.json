@@ -47,7 +47,7 @@
     "pack": "node build/pack.js",
     "demo": "node build/demo.js",
     "site": "node build/site.js",
-    "build": "node build/pack.js && node build/dist.js && node build/demo.js",
+    "build": "node build/pack.js && node build/dist.js && node build/demo.js && node build/site.js",
     "check-labels": "node build/check-labels.js && echo 'open _tmp/check-labels.html and run checkLabels()'",
     "svg": "node bin/ukrmap.js",
     "test": "node test/test.js",

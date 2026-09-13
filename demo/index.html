@@ -34,14 +34,15 @@ a:hover { border-bottom-color: #a5402f; color: #a5402f; }
 hr { border: 0; border-top: 1px solid #e2ddcd; margin: 3rem 0; }
 .colophon { font-size: .92rem; line-height: 1.5; color: #6a6558; margin-top: 1.6rem; }
 
-/* Tufte's margin notes: the aside sits in the gutter, not in the flow. */
+/* margin notes: the aside sits in the gutter, not in the flow. */
 .mn {
   float: right; clear: right; width: 34%; margin: .35rem 0 .9rem 0;
   font-size: .92rem; line-height: 1.42; color: #56514a;
 }
 .mn b { font-weight: 400; color: #111; }
 
-code, kbd { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .85em; background: #e4eeed82; border-radius: 3px; }
+.keep-together { display: inline-block; }
+code, kbd { display: inline-block; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .85em; background: #e4eeed82; border-radius: 3px; }
 pre {
   width: 58%; margin: .6rem 0 1.4rem; padding: .55rem 0 .55rem 1rem;
   border-left: 2px solid #e2ddcd; overflow-x: auto;
@@ -89,7 +90,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
 /* The first map is not in this list: its palette is a preset, written into a
    stylesheet of its own by applySkin() so the same object can also be handed
    to render() for the download. Everything below is the same idea, fixed. */
-#paint .ukr-map, #alerts .ukr-map, .rrow .ukr-map {
+#paint .ukr-map, #alerts .ukr-map, #fold .ukr-map, .rrow .ukr-map {
   --ukr-land: #e7e3d6;
   --ukr-line: #a8a294;
   --ukr-outline: #6f6a5c;
@@ -105,7 +106,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
 #map .ukr-map { --ukr-font: "Ubuntu Condensed", "Arial Narrow", sans-serif; --ukr-dur: .52s; }
 #map .ukr-region { cursor: pointer; }
 /* A map drawn for a dark ground is a hole in a cream page, so the one preset
-   that needs something of the page gets it — from the page, not the map. */
+   that needs something of the page gets it — from the page, not the map. */
 /* The ground is a box-shadow spread, not padding: the component reads
    el.clientWidth to get its map-units-per-pixel, and padding is inside it. */
 #map { margin: .7rem 0; border-radius: 3px; transition: background-color .3s, box-shadow .3s; }
@@ -122,6 +123,23 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
 #readout div { display: flex; gap: .4rem; align-items: baseline; }
 #readout dt { font-variant: small-caps; letter-spacing: .06em; color: #8d8677; }
 #readout dd { margin: 0; font-variant-numeric: tabular-nums; color: #302c24; }
+
+/* ── the grid, in the margin ──────────────────────────────────────────── */
+.foldnote .act { margin: .2rem 0 .5rem; }
+@media (prefers-reduced-motion: reduce) {
+  /* The plugin turns its transition off under this setting, and on a page that
+     animates at the reader it would be right. Here the animation IS the thing
+     being shown, and it only runs when the button is pressed, so this one map
+     keeps it. Nothing else on the page moves. */
+  #fold .ukr-stage { transition: height var(--ukr-dur, .5s)
+                     var(--ukr-ease, cubic-bezier(.62,0,.28,1)); }
+  #fold .ukr-unit  { transition: transform var(--ukr-dur, .5s)
+                     var(--ukr-ease, cubic-bezier(.62,0,.28,1)); }
+  #fold .ukr-borders, #fold .ukr-outline, #fold .ukr-coast,
+  #fold .ukr-coastglow, #fold .ukr-water { transition: opacity .34s linear; }
+  #fold .ukr-tilewater, #fold .ukr-tilecoast, #fold .ukr-tileglow {
+    transition: opacity .25s linear; }
+}
 
 /* ── recipes ──────────────────────────────────────────────────────────── */
 .small-map { max-width: 400px; }
@@ -152,7 +170,11 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
    one quantity, and a legend should look like the thing it explains */
 .scale { display: flex; flex-direction: column; gap: .3rem; max-width: 620px;
          margin: .7rem 0 0; font-size: .88rem; color: #56514a; }
-.scale .bar { height: .8rem; border-radius: 2px; }
+.scale .unit { font-variant: small-caps; letter-spacing: .06em; color: #8d8677; }
+.scale .bar { position: relative; height: .9rem; border-radius: 2px; }
+/* one hairline per region, at its own place on the ramp */
+.scale .bar i { position: absolute; top: 0; bottom: 0; width: 1px;
+                background: #26241f; opacity: .45; }
 .scale .ticks { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
 
 .swatches { display: flex; gap: .45rem; align-items: center; }
@@ -236,6 +258,12 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
 <p data-t="pcomp"></p>
 <pre data-t="precomp"></pre>
 
+<aside class="mn foldnote">
+  <div id="fold"></div>
+  <button id="foldToggle" class="act"></button>
+  <p data-t="mnFold"></p>
+</aside>
+
 <h2 data-t="h2alerts"></h2>
 <p data-t="palerts"></p>
 <figure>
@@ -297,13 +325,14 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
   var TEXT = {
     uk: {
       docTitle: 'ukrmap · невелика мапа України',
-      meta: 'Мапа регіонів України: файл зображення, а не бібліотека. Наведення по справжніх межах областей, системні підказки, колір за даними з одного правила CSS, коди ISO 3166-2.',
+      meta: 'Мапа регіонів України: файл зображення, а не бібліотека. Наведення по справжніх межах областей, системні підказки, колір за даними з одного правила CSS, коди <span class="keep-together">ISO 3166-2</span>.',
       sub: 'Мапа регіонів України для сайтів, преси та статистичних звітів',
       lead: 'Це файл зображення, а не бібліотека. Вставте SVG у сторінку — і курсор реагує на справжню форму області, а не на прямокутник, підказки системні, а колір задає одне правило CSS. '
-        + 'Кожна область несе свій код ISO 3166-2, тож таблиця з даними лягає на мапу без перекладача.',
-      ship: 'Ця сторінка — і демо, і інструкція. Мапу нижче змонтовано компонентом: без нього не було б ні контролів, ні сітки, ні рядка з даними — решту на ній робить сам файл. У проєкт ви берете або SVG-файл, або компонент на {code} КБ (gzip).',
+        + 'Кожна область несе свій код <span class="keep-together">ISO 3166-2</span>, тож таблиця з даними лягає на мапу без перекладача.',
+      ship: 'Ця сторінка — і демо, і інструкція. Мапу нижче змонтовано компонентом: без нього не було б ні контролів, ні рядка з даними під нею — решту на ній робить сам файл. У проєкт ви берете або SVG-файл, або компонент на <span class="keep-together">{code} КБ (gzip)</span>.',
       caption: 'Геометрія: Natural Earth 10m admin-1, рівнокутна конічна проєкція Ламберта зі стандартними паралелями 44,5° і 52°, топологічне спрощення з інтервалом 1,4 км. Центри регіонів нанесено за справжніми координатами, а підписи розставлено вручну, щоб вони не виходили за межі регіону.',
-      mnOrigin: '<b>Звідки взялася сітка.</b> 2012 року ця мапа була PNG-спрайтом із <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: контури для курсора обводилися вручну, зате по справжніх межах — <a href="https://keymasterr.com/micro/ukrmap/2012/">оригінал лежить поруч</a>. Розкладання вийшло з тих самих плиток майже випадково і сподобалося настільки, що під нього варто було підібрати порядок: той, у якому області найменше перетинаються дорогою — три смуги із заходу на схід. Тут сітка — здебільшого внутрішній жарт; якщо він і вам до смаку, це один додатковий файл, <code>ukrmap-unfold.js</code>.',
+      mnOrigin: '<b>Звідки ця мапа.</b> 2012 року вона була PNG-спрайтом із <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: контури для курсора обводилися вручну, зате по справжніх межах — <a href="https://keymasterr.com/micro/ukrmap/2012/">оригінал лежить поруч</a>. Реакція на справжню форму області — звідти; усе інше відтоді переписано.',
+      mnFold: '<b>Сітка — теж зі спадку.</b> Розкладання вийшло з тих самих плиток майже випадково і сподобалося настільки, що під нього варто було підібрати порядок: той, у якому області найменше перетинаються дорогою — три смуги із заходу на схід. Тут це здебільшого внутрішній жарт; якщо він і вам до смаку, це один додатковий файл, <code>ukrmap-unfold.js</code>.',
       mnSyvash: '<b>Чому Крим тримається на двох перешийках.</b> У Natural Earth Сиваш лежить у шарі озер, тож адміністративні полігони накривають його як суходіл, і на дрібномасштабній мапі смуга між Херсонщиною і Кримом виходить суцільною. Збірка виносить лагуни — Сиваш і Дністровський лиман — в окремий шар і вирізає їх із суходолу ще до проєктування. Звідси й форма: Перекоп на заході, Арабатська стрілка на сході, лагуна між ними.',
       mnFont: '<b>Шрифт до компонента не входить.</b> Підписи беруть шрифт із <code>--ukr-font</code>, а без нього — вузький системний. Ця сторінка завантажує Ubuntu Condensed: зсуви підписів підібрано саме під нього.',
       h2use: 'Як користуватися',
@@ -318,7 +347,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
       h3embed: '2 · Вставити на сторінку',
       h3css: '3 · Інтерактивно, і все ще без JavaScript',
       pcss: 'Кожен регіон має код ISO 3166-2 в <code>data-key</code> і назву в '
-        + '<code>&lt;title&gt;</code>. Далі все робить ваш CSS. <code>--c</code> — одна змінна для заливки регіону й тонкої обводки, що закриває щілини між сусідами, тож заливка й обводка завжди одного кольору.',
+        + '<code>&lt;title&gt;</code>. Далі все робить ваш CSS: колір області задає змінна <code>--c</code>, одна на область.',
       precss: '&lt;style&gt;\n'
         + '  .ukr-region:hover      { --c: #a5402f }   <span class="c">/* по справжніх межах */</span>\n'
         + '  [data-key="UA-46"]     { --c: #c0392b }   <span class="c">/* Львівська */</span>\n'
@@ -338,13 +367,12 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '  map.mark({ \'UA-46\': \'alert\' });          <span class="c">// додає клас .m-alert</span>\n'
         + '  map.update({ labels: \'region\' });        <span class="c">// без перемальовування</span>\n'
         + '&lt;/script&gt;',
-      mnOrder: '<b>Чому розкладений вигляд зберігає порядок 2012 року.</b> Регіони розлітаються трьома смугами із заходу на схід. Якщо поміряти весь перехід, це єдиний порядок, у якому перекриття регіонів монотонно спадає до нуля: за алфавітом воно піднімається приблизно до 95% площі плитки, за населенням — до 123%, тобто регіони лягають утроє. Саму сітку ніхто не обчислює: браузер розкладає прямокутники, а компонент зчитує позиції — точно як у версії 2012 року.',
       h2data: 'Як улаштовані дані',
-      pdata: 'По одному файлу на рівень деталізації. Це топологія, а не набір полігонів: кожна дуга зберігається один раз, а регіон — це список індексів дуг. Внутрішні межі й державний кордон окремо не зберігаються: їх виводять із того, скільком регіонам належить кожна дуга. Тому й Київ, коли його виділити окремо, отримує правильну межу. Рівень деталізації — це крок спрощення в метрах, і він дорівнює одному пікселю при ширині 1900, 950 і 470 px відповідно: дрібніші вигини не розмиваються, їх просто немає. На екрані 2× поділіть ширину навпіл.',
+      pdata: 'По одному файлу на рівень деталізації. Це топологія, а не набір полігонів: кожна дуга зберігається один раз, а регіон — це список індексів дуг. Внутрішні межі й державний кордон окремо не зберігаються: їх виводять із того, скільком регіонам належить кожна дуга. Тому й Київ, коли його виділити окремо, отримує правильну межу. Рівень деталізації — це крок спрощення в метрах: менший крок — більше точок і важчий файл.',
       thDetail: 'деталізація', thPoints: 'точок', thFile: 'файл', thUse: 'коли використовувати',
       usesPrint: 'друк і великі розміри', usesDefault: 'за замовчуванням',
       usesSmall: 'якщо мапа не ширша за 470 px',
-      pcarries: 'Кожен регіон також містить назву українською та англійською, площу, населення, центр із координатами в проєкції та габарити для сітки.',
+      pcarries: 'Крім геометрії, у файлі є назва області українською й англійською, центр — назва і координати в проєкції, габарити для сітки та ручні зсуви підписів.',
       h2notes: 'Примітки',
       notes: [
         '<b>Вода — якою була до червня 2023 року.</b> Після руйнування греблі Каховське водосховище спорожніло. Нової виміряної геометрії немає, тож замість вигаданого русла водосховище намальоване яким було, і позначене <code>data-until="2023"</code> — стилізуйте або приховайте його на свій розсуд.',
@@ -389,7 +417,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
 
       h2export: 'Приклад: карта за даними',
       pexport: 'Щільність населення — з того самого <code>ua-facts.json</code>, що вже лежить у пакеті. '
-        + '<code>UkrMap.scale()</code> сам бере діапазон із даних. Тут — логарифмічно, бо '
+        + '<code>UkrMap.colorData()</code> сам бере діапазон із даних. Тут — логарифмічно, бо '
         + 'щільність величина мультиплікативна: Київ у 20 разів щільніший за область, і '
         + 'шкала має це показувати, а не рівняти всіх у ряд. Далі <code>set()</code> ставить '
         + 'колір, а <code>title()</code> кладе число в ту саму системну підказку, яка в мапи '
@@ -403,13 +431,13 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '  \'UA-14\': 153, \'UA-46\': 113, \'UA-77\': 110,\n'
         + '  \'UA-21\': 97,    <span class="c">// … і так усі 26</span>\n'
         + '};\n\n'
-        + 'const s = UkrMap.scale(dens, { spread: \'log\' });\n'
+        + 'const s = UkrMap.colorData(dens, { spread: \'log\' });\n'
         + 'map.set(s.fills);   <span class="c">// діапазон узято з даних</span>\n\n'
-        + '<span class="c">// значення — у ту саму системну підказку</span>\n'
+        + '<span class="c">// значення — у ту саму системну підказку</span>\n'
         + 'const titles = {};\n'
         + 'for (const key in dens) titles[key] = map.name(key) + \': \' + dens[key];\n'
         + 'map.title(titles);\n\n'
-        + '<span class="c">// для легенди: s.at(0…1), s.valueAt(0…1)</span>',
+        + '<span class="c">// для легенди: s.at(0…1), s.valueAt(0…1), s.posOf(значення)</span>',
 
       h2list: 'Приклад: окремий SVG для кожного регіону',
       plist: 'Кожен регіон можна отримати окремим маленьким SVG, а все навколо лишається звичайним HTML: його можна стилізувати й виділяти, і він доступний для скрінрідерів. <code>scale</code> задає однакову кількість пікселів на одиницю мапи, тож розміри можна порівнювати.',
@@ -419,10 +447,10 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + 'npx github:keymasterr/ukrmap --split ./regions --scale=160 --style=attrs',
       legAlert: 'тривога', legPartial: 'часткова',
       ctl: {
-        view: 'вигляд', labels: 'підписи', water: 'вода', kyiv: 'Київ',
+        labels: 'підписи', water: 'вода', kyiv: 'Київ',
         skin: 'палітра',
         paper: 'папір', ink: 'друк', atlas: 'атлас', night: 'ніч',
-        map: 'мапа', grid: 'сітка',
+        unfold: 'розкласти', fold: 'зібрати',
         city: 'місто', region: 'регіон', none: 'немає',
         on: 'увімк.', off: 'вимк.', all: 'усі річки',
         merged: 'в області', split: 'окремо',
@@ -436,19 +464,21 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '<span class="c">// p.x, p.y — те саме в одиницях мапи, без DOM:</span>\n'
         + '<span class="c">// UkrMap.project(UKR_DATA, lon, lat)</span>',
       ro: { center: 'центр', area: 'площа', pop: 'населення', dens: 'щільність',
+            unit: 'осіб/км²',
             km2: 'км²', mln: 'млн', perkm: '/км²', hint: 'Наведіть курсор на регіон.' },
     },
 
     en: {
       docTitle: 'ukrmap · a small map of Ukraine',
-      meta: 'A map of Ukraine’s regions: an image file, not a library. Hover on real region edges, native tooltips, data-driven color from one CSS rule, ISO 3166-2 codes.',
+      meta: 'A map of Ukraine’s regions: an image file, not a library. Hover on real region edges, native tooltips, data-driven color from one CSS rule, <span class="keep-together">ISO 3166-2</span> codes.',
       sub: 'A map of Ukraine’s regions for websites, the press and statistical reports',
       lead: 'It is an image file, not a library. Inline the SVG and hover follows the real shape of a region rather than a bounding box, tooltips are native, and color comes from one CSS rule. '
-        + 'Every region carries its ISO 3166-2 code, so a table of data lands on the map without a translation step.',
-      ship: 'This page is both a demo and a how-to. The map below is mounted by the component: without it there would be no controls, no grid, no readout. Everything else you see is the file. What you ship is that SVG, or the {code} KB gzipped component.',
+        + 'Every region carries its <span class="keep-together">ISO 3166-2</span> code, so a table of data lands on the map without a translation step.',
+      ship: 'This page is both a demo and a how-to. The map below is mounted by the component: without it there would be no controls and no readout. Everything else you see is the file. What you ship is that SVG, or the <span class="keep-together">{code} KB</span> gzipped component.',
       caption: 'Geometry: Natural Earth 10m admin-1, Lambert Conformal Conic with standard parallels at 44.5° and 52°, simplified as a topology at a 1.4 km interval. Administrative centers are at their true projected coordinates; each label is placed by hand to stay inside its region.',
-      mnOrigin: '<b>Where the grid comes from.</b> In 2012 this map was a PNG sprite with <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: the hit areas were traced by hand, but they followed the real borders — <a href="https://keymasterr.com/micro/ukrmap/2012/">the original is still next door</a>. The unfolding fell out of those same tiles almost by accident, and it was good enough to be worth choosing an order for: the one where regions cross each other least on the way — three bands, west to east. Here the grid is mostly an in-joke; if it is your kind of joke, it is one extra file, <code>ukrmap-unfold.js</code>.',
-      mnSyvash: '<b>Why Crimea hangs on two necks.</b> Natural Earth files the Syvash with the lakes, so the administrative polygons cover it as land, and on a small-scale map the strip between Kherson and Crimea comes out solid. The build pulls the lagoons — the Syvash and the Dniester Liman — into a layer of their own and erases them from the land before projecting. Hence the shape: the Perekop neck in the west, the Arabat Spit in the east, lagoon in between.',
+      mnOrigin: '<b>Where this map comes from.</b> In 2012 it was a PNG sprite with <code>&lt;map&gt;&lt;area shape="poly"&gt;</code>: the hit areas were traced by hand, but they followed the real borders — <a href="https://keymasterr.com/micro/ukrmap/2012/">the original is still next door</a>. Hover on the true shape of a region is what survived; everything else has been rewritten since.',
+      mnFold: '<b>The grid is inherited too.</b> The unfolding fell out of those same tiles almost by accident, and it was good enough to be worth choosing an order for: the one where regions cross each other least on the way — three bands, west to east. Here it is mostly an in-joke; if it is your kind of joke, it is one extra file, <code>ukrmap-unfold.js</code>.',
+      mnSyvash: '<b>Why Crimea hangs on two necks.</b> Natural Earth files the Syvash with the lakes, so the administrative polygons cover it as land, and on a small-scale map the strip between Kherson and Crimea comes out solid. The build pulls the lagoons — the Syvash and the Dniester Liman — into a layer of their own and erases them from the land before projecting. Hence the shape: the Perekop neck in the west, the Arabat Spit in the east, lagoon in between.',
       mnFont: '<b>The component doesn’t ship a font.</b> Labels ask for <code>--ukr-font</code> and fall back to a condensed system stack. This page loads Ubuntu Condensed, the font the hand-tuned label offsets were measured against.',
       h2use: 'Using it',
       h3file: '1 · Just the file',
@@ -457,11 +487,11 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
       prefile: 'npx github:keymasterr/ukrmap -o ua.svg\n\n'
         + '<span class="c"># color it from a table: {"UA-46": "#c0392b", …}</span>\n'
         + 'npx github:keymasterr/ukrmap --data values.json -o ua.svg\n\n'
-        + '<span class="c"># your own palette — the same keys as the CSS custom properties</span>\n'
+        + '<span class="c"># your own palette — the same keys as the CSS custom properties</span>\n'
         + 'npx github:keymasterr/ukrmap --palette land=#e7e3d6,water=#5891b6 -o ua.svg',
       h3embed: '2 · Put it on a page',
       h3css: '3 · Interactive, still no JavaScript',
-      pcss: 'Every region carries its ISO 3166-2 code in <code>data-key</code> and its name in a <code>&lt;title&gt;</code>. From there your stylesheet does the rest. <code>--c</code> is a single custom property that sets both a region’s fill and the hairline stroke that keeps it flush with its neighbors, so the two always match.',
+      pcss: 'Every region carries its <span class="keep-together">ISO 3166-2</span> code in <code>data-key</code> and its name in a <code>&lt;title&gt;</code>. From there your stylesheet does the rest: a region’s color is one custom property, <code>--c</code>.',
       precss: '&lt;style&gt;\n'
         + '  .ukr-region:hover      { --c: #a5402f }   <span class="c">/* true-edge hover */</span>\n'
         + '  [data-key="UA-46"]     { --c: #c0392b }   <span class="c">/* Lviv */</span>\n'
@@ -481,18 +511,17 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '  map.mark({ \'UA-46\': \'alert\' });          <span class="c">// adds .m-alert</span>\n'
         + '  map.update({ labels: \'region\' });        <span class="c">// no re-render</span>\n'
         + '&lt;/script&gt;',
-      mnOrder: '<b>Why the unfolded view keeps its 2012 order.</b> The regions fly out in three west-to-east bands. It’s the only order in which region overlap falls monotonically to zero over the whole transition. Sorted alphabetically, overlap peaks at about 95% of a tile’s area; sorted by population, at 123%, which means regions stacked three deep. The component doesn’t compute the grid: the browser lays out the boxes and the component reads their positions back, as the 2012 version did.',
       h2data: 'What’s in the data',
-      pdata: 'One file per detail level. It’s a topology, not a set of polygons: every arc is stored once and each region is a list of arc indices. Internal borders and the national outline aren’t stored as separate lines; they’re derived from how many regions use each arc. That’s also why Kyiv City gets the right boundary when you split it out. A detail level is a simplification interval in meters, and it measures one pixel at 1900, 950 and 470 px wide respectively: finer bends are not blurred, they are simply not there. Halve the width on a 2× screen.',
+      pdata: 'One file per detail level. It’s a topology, not a set of polygons: every arc is stored once and each region is a list of arc indices. Internal borders and the national outline aren’t stored as separate lines; they’re derived from how many regions use each arc. That’s also why Kyiv City gets the right boundary when you split it out. A detail level is a simplification interval in meters: a smaller interval means more points and a heavier file.',
       thDetail: 'detail', thPoints: 'points', thFile: 'file', thUse: 'when to use it',
       usesPrint: 'print and large sizes', usesDefault: 'the default',
       usesSmall: 'if the map is no wider than 470 px',
-      pcarries: 'Each region also carries its name in Ukrainian and English, its area and population, its administrative center with projected coordinates, and the bounding box the unfolded layout needs.',
+      pcarries: 'Besides the geometry, the file carries each region’s name in Ukrainian and English, its administrative center — the name and the projected coordinates — the bounding box the unfolded layout needs, and the hand-tuned label offsets.',
       h2notes: 'Notes',
       notes: [
         '<b>Water is shown as it was before June 2023.</b> The Kakhovka Reservoir drained after the dam was destroyed. No surveyed replacement geometry exists, so instead of inventing a channel, the map keeps the reservoir at its old extent and tags it <code>data-until="2023"</code>. Style or hide it as you see fit.',
         '<b>Population figures predate the full-scale invasion</b> (1 January 2022; Crimea and Sevastopol: 2014, the last data Ukraine published). They’re there for scale and aren’t current.',
-        '<b>Crimea and Sevastopol are Ukrainian</b> and are drawn with their ISO 3166-2 codes <code>UA-43</code> and <code>UA-40</code>. Natural Earth files them under Russia, following a de facto control convention; the build corrects that.',
+        '<b>Crimea and Sevastopol are Ukrainian</b> and are drawn with their <span class="keep-together">ISO 3166-2</span> codes <code>UA-43</code> and <code>UA-40</code>. Natural Earth files them under Russia, following a de facto control convention; the build corrects that.',
         '<b>Kirovohrad Oblast’s center is Kropyvnytskyi, and Dnipropetrovsk Oblast’s is Dnipro</b> — both renamed in 2016, after the original version of this map.',
       ],
       copyright: '© 2012–2026 Roman Kliuchkovych<br><a href="https://keymasterr.com">keymasterr.com</a>',
@@ -510,7 +539,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '<span class="c">     No :hover, no recoloring. &lt;title&gt; tooltips still work. --&gt;</span>\n'
         + '&lt;img src="ua.svg" alt="Map of Ukraine" width="720"&gt;\n\n'
         + '<span class="c">&lt;!-- 2. inline: paste the file’s contents straight into the markup.</span>\n'
-        + '<span class="c">     The only way :hover and data-driven color work — step 3. --&gt;</span>\n'
+        + '<span class="c">     The only way :hover and data-driven color work — step 3. --&gt;</span>\n'
         + '&lt;svg class="ukr-map" viewBox="…"&gt;…&lt;/svg&gt;   <span class="c">&lt;!-- ua.svg contents --&gt;</span>\n\n'
         + '<span class="c">&lt;!-- 3. &lt;object&gt;: styleable only by CSS inside the SVG --&gt;</span>\n'
         + '&lt;object data="ua.svg" type="image/svg+xml" width="720"&gt;&lt;/object&gt;',
@@ -530,7 +559,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
 
       h2export: 'Recipe: a map of a number',
       pexport: 'Population density, from the same <code>ua-facts.json</code> that already ships with '
-        + '<code>UkrMap.scale()</code> reads the range off the data — logarithmically here, '
+        + '<code>UkrMap.colorData()</code> reads the range off the data — logarithmically here, '
         + 'because density is a multiplicative quantity: Kyiv is twenty times denser than '
         + 'its oblast, and the scale should say so rather than level everyone into a queue. '
         + 'Then <code>set()</code> puts the color on and <code>title()</code> puts the number '
@@ -545,13 +574,13 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '  \'UA-14\': 153, \'UA-46\': 113, \'UA-77\': 110,\n'
         + '  \'UA-21\': 97,    <span class="c">// … and so on for all 26</span>\n'
         + '};\n\n'
-        + 'const s = UkrMap.scale(dens, { spread: \'log\' });\n'
+        + 'const s = UkrMap.colorData(dens, { spread: \'log\' });\n'
         + 'map.set(s.fills);   <span class="c">// range read off the data</span>\n\n'
         + '<span class="c">// the value, into the tooltip that is already there</span>\n'
         + 'const titles = {};\n'
         + 'for (const key in dens) titles[key] = map.name(key) + \': \' + dens[key];\n'
         + 'map.title(titles);\n\n'
-        + '<span class="c">// for a legend: s.at(0…1), s.valueAt(0…1)</span>',
+        + '<span class="c">// for a legend: s.at(0…1), s.valueAt(0…1), s.posOf(value)</span>',
 
       h2list: 'Recipe: one SVG per region',
       plist: 'Each region comes back as its own small SVG, and everything around it stays ordinary HTML — styleable, selectable, accessible. <code>scale</code> sets the same pixels per map unit for every region, so the shapes are comparable in size.',
@@ -561,10 +590,10 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + 'npx github:keymasterr/ukrmap --split ./regions --scale=160 --style=attrs',
       legAlert: 'alert', legPartial: 'partial',
       ctl: {
-        view: 'view', labels: 'labels', water: 'water', kyiv: 'Kyiv',
+        labels: 'labels', water: 'water', kyiv: 'Kyiv',
         skin: 'palette',
         paper: 'paper', ink: 'print', atlas: 'atlas', night: 'night',
-        map: 'map', grid: 'grid',
+        unfold: 'unfold', fold: 'fold back',
         city: 'city', region: 'region', none: 'none',
         on: 'on', off: 'off', all: 'every river',
         merged: 'in the oblast', split: 'separate',
@@ -578,6 +607,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
         + '<span class="c">// p.x, p.y are the same point in map units, no DOM:</span>\n'
         + '<span class="c">// UkrMap.project(UKR_DATA, lon, lat)</span>',
       ro: { center: 'center', area: 'area', pop: 'population', dens: 'density',
+            unit: 'people/km²',
             km2: 'km²', mln: 'M', perkm: '/km²', hint: 'Hover over a region.' },
     },
   };
@@ -593,13 +623,12 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
        is the demo choosing the honest one for data work. */
     lang: lang, labels: 'city', water: true, kyivSeparate: true,
   };
-  var view = 'map';
   var waterMode = 'on';                 /* 'on' | 'off' | 'all' */
   var skin = 'paper';
-  var map = null, current = null;
+  var map = null, current = null, foldMap = null, unfolded = false;
 
   /* ------------------------------------------------------------- presets
-     One object per skin, in the shape `palette` takes — which is also, key for
+     One object per skin, in the shape `palette` takes — which is also, key for
      key, the set of custom properties the stylesheet knows. That is the point
      of keeping them here rather than in the CSS above: the live map is
      restyled by writing them into a stylesheet, and the SVG the save buttons
@@ -634,7 +663,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
       water: '#C9EBF6', glowAlpha: '.38', hi: '#cbdbb2',
       text: '#4A3830', halo: '#D5DCB3',
     },
-    /* No dark mode ships, on purpose — the library will not guess the host's
+    /* No dark mode ships, on purpose — the library will not guess the host's
        intent from the OS. This is the four lines of CSS the README says it
        takes, with the page supplying the dark ground behind it. */
     night: {
@@ -645,7 +674,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
   };
 
   /* A stylesheet of its own, appended after the page's, so it wins on source
-     order without an !important or an id — and so the map is restyled from
+     order without an !important or an id — and so the map is restyled from
      outside the component, exactly as a host would do it. */
   var skinCss = document.createElement('style');
   document.head.appendChild(skinCss);
@@ -659,7 +688,6 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
   }
 
   var CONTROLS = [
-    { name: 'view',   items: [['map', 'map'], ['grid', 'grid']] },
     { name: 'labels', items: [['city', 'city'], ['region', 'region'], ['none', 'none']] },
     { name: 'water',  items: [['on', 'on'], ['off', 'off'], ['all', 'all']] },
     { name: 'kyiv',   items: [['merged', 'merged'], ['split', 'split']] },
@@ -672,7 +700,6 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
   ];
 
   function currentValue(name) {
-    if (name === 'view') return view;
     if (name === 'labels') return opts.labels;
     if (name === 'water') return waterMode;
     if (name === 'skin') return skin;
@@ -680,7 +707,6 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
   }
 
   function choose(name, value) {
-    if (name === 'view') { view = value; map.view(value); syncControls(); return; }
     if (name === 'skin') { applySkin(value); syncControls(); return; }
     if (name === 'labels') { opts.labels = value; map.update({ labels: value }); }
     if (name === 'water') {
@@ -737,6 +763,11 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
     });
   }
 
+  function paintFoldButton() {
+    var t = TEXT[lang].ctl;
+    document.getElementById('foldToggle').textContent = unfolded ? t.fold : t.unfold;
+  }
+
   function buildLangSwitch() {
     var host = document.getElementById('lang');
     host.textContent = '';
@@ -784,6 +815,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
     });
     buildLangSwitch();
     buildControls();
+    paintFoldButton();
     placePins();          /* the pin labels are copy too */
     buildSizes();
     alertLegend();
@@ -796,6 +828,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
     opts.lang = l;
     paintCopy();
     map.update({ lang: l });     /* labels swap in place — the map does not blink */
+    if (foldMap) foldMap.update({ lang: l });
     if (alertMap) alertMap.update({ lang: l });
     if (paintMap) { paintMap.update({ lang: l }); paintDensity(); buildScale(); }
     showCurrent();
@@ -876,8 +909,8 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
 
   /* ------------------------------------------------- recipe: a choropleth
      Real numbers, not a paint box. Population density is the one quantity the
-     shipped facts file can produce on its own — area and population are both
-     in it — so nothing on this map is invented. */
+     shipped facts file can produce on its own — area and population are both
+     in it — so nothing on this map is invented. */
   var paintMap = null, dens = null, densScale = null;
 
   /* set() puts the color on, title() puts the number in the tooltip that is
@@ -894,7 +927,7 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
     /* log, not the rank default: density is a multiplicative quantity, and
        log keeps the fact that Kyiv is twenty times denser rather than one
        step denser. Rank would use more of the ramp; this reads truer. */
-    densScale = UkrMap.scale(dens, { spread: 'log' });
+    densScale = UkrMap.colorData(dens, { spread: 'log' });
     paintMap.units.forEach(function (u) {
       titles[u.key] = UkrMap.fullName(u.head, lang) + ': ' + dens[u.key] + ' ' + T.perkm;
     });
@@ -903,23 +936,31 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
     paintMap.set(densScale.fills).title(titles);
   }
 
-  /* A continuous bar, because the scale is continuous — and the labels are
-     quartiles, because position along it is rank rather than value. The bar is
-     deliberately not linear in the numbers: from 62 to 3518 is one step at this
-     end, and the caption says so rather than the axis pretending otherwise. */
+  /* The bar is the ramp; the hairlines on it are the twenty-six regions, each
+     at its own position. posOf() is the scale read backwards, so a mark cannot
+     disagree with the color under it, and the rug is the argument for the log
+     spread made visible instead of asserted: a crowd below a hundred, then Kyiv
+     alone at the far end. Only the two ends are labelled — they are the only
+     positions a reader can point at, and a number printed in the middle of a
+     log ramp claims to be the middle of the data, which it is not. */
   function buildScale() {
     if (!densScale) return;
     var host = document.getElementById('densScale');
     var T = TEXT[lang].ro;
     var stops = [0, 0.25, 0.5, 0.75, 1];
+    var d = densScale.domain;
+    var marks = paintMap.units.map(function (u) {
+      var v = dens[u.key];
+      return '<i style="left:' + (densScale.posOf(v) * 100).toFixed(2) + '%" title="'
+        + UkrMap.fullName(u.head, lang) + ': ' + v + T.perkm + '"></i>';
+    }).join('');
     host.innerHTML =
-      '<div class="bar" style="background:linear-gradient(90deg,'
-        + stops.map(function (t) { return densScale.at(t); }).join(',') + ')"></div>'
-      + '<div class="ticks">'
-      + stops.map(function (t) {
-          return '<span>' + Math.round(densScale.valueAt(t)) + '</span>';
-        }).join('')
-      + '<span>' + T.perkm + '</span></div>';
+      '<div class="unit">' + T.dens + ', ' + T.unit + '</div>'
+      + '<div class="bar" style="background:linear-gradient(90deg,'
+        + stops.map(function (t) { return densScale.at(t); }).join(',') + ')">'
+        + marks + '</div>'
+      + '<div class="ticks"><span>' + Math.round(d[0]) + '</span>'
+        + '<span>' + fmt(Math.round(d[1])) + '</span></div>';
   }
 
   function saveBlob(blob, name) {
@@ -1041,8 +1082,22 @@ figcaption { font-size: .92rem; color: #56514a; margin-top: .7rem; width: 58%; }
   /* ---------------------------------------------------------------- go */
   applySkin(skin);
   map = UkrMap('#map', opts);
-  UkrMap.unfold(map);          /* the map <-> grid view, opt-in */
   map.on('hover', function (k, u) { current = k ? [k, u] : null; showCurrent(); });
+
+  /* The unfolded view lives here now, on its own small map. On the main map it
+     cost more than it was worth: the plugin widens the viewBox to 1.62× so the
+     grid fits, and that width is reserved in both views — Ukraine was drawn
+     685 px wide in a 1120 px figure. It was also the one control whose result
+     the save buttons could not hand over. */
+  foldMap = UkrMap('#fold', {
+    data: window.UKR_DATA, labels: 'none', water: true, lang: lang, titles: false,
+  });
+  UkrMap.unfold(foldMap);
+  document.getElementById('foldToggle').onclick = function () {
+    unfolded = !unfolded;
+    foldMap.view(unfolded ? 'grid' : 'map');
+    paintFoldButton();
+  };
   alertMap = UkrMap('#alerts', {
     data: window.UKR_DATA, labels: 'none', water: false, lang: lang,
   });

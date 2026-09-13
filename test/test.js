@@ -668,18 +668,18 @@ test('arrow keys go to a neighbor that is really that way', () => {
   assert.strictEqual(UkrMap.neighbors(load(1400), {}).of('UA-30'), null);
 });
 
-test('scale() turns numbers into colors without being told the range', () => {
+test('colorData() turns numbers into colors without being told the range', () => {
   const hex = /^#[0-9a-f]{6}$/;
 
   /* the stops come back exactly where they were put */
   const ramp = ['#f2ddc9', '#e0a882', '#c76a4a', '#a5402f', '#7f2d1e'];
-  const even = UkrMap.scale({ a: 0, b: 25, c: 50, d: 75, e: 100 },
+  const even = UkrMap.colorData({ a: 0, b: 25, c: 50, d: 75, e: 100 },
     { colors: ramp, domain: [0, 100] });
   assert.deepStrictEqual(Object.values(even.fills), ramp, 'and the conversion round-trips');
   assert.deepStrictEqual(even.domain, [0, 100], 'the domain is read off the data');
 
   /* explicit domain wins, and values outside it clamp rather than wrap */
-  const fixed = UkrMap.scale({ a: -50, b: 50, c: 999 },
+  const fixed = UkrMap.colorData({ a: -50, b: 50, c: 999 },
     { domain: [0, 100], colors: ramp });
   assert.strictEqual(fixed.fills.a, ramp[0]);
   assert.strictEqual(fixed.fills.c, ramp[ramp.length - 1]);
@@ -699,35 +699,35 @@ test('scale() turns numbers into colors without being told the range', () => {
   }));
   const ordinary = (f) => Object.entries(f).filter(([k]) => k !== 'outlier').map((e) => e[1]);
 
-  const rank = UkrMap.scale(skewed);
+  const rank = UkrMap.colorData(skewed);
   assert.strictEqual(rank.breaks, null, 'the default is a continuous ramp');
   assert.ok(spread(ordinary(rank.fills)) > 140,
     `rank spreads the ordinary values across the ramp (got ${spread(ordinary(rank.fills))})`);
   assert.ok(new Set(Object.values(rank.fills)).size > 20, 'and keeps them apart');
 
   /* the linear reading is still there, and it is what `domain` asks for */
-  const linear = UkrMap.scale(skewed, { domain: [30, 3518] });
+  const linear = UkrMap.colorData(skewed, { domain: [30, 3518] });
   assert.ok(spread(ordinary(linear.fills)) < 24,
     `linear collapses the field, which is why it is opt-in (got ${spread(ordinary(linear.fills))})`);
 
   /* classes, when you want them, are quantiles for the same reason */
-  const classed = UkrMap.scale(skewed, { steps: 5 });
+  const classed = UkrMap.colorData(skewed, { steps: 5 });
   const counts = {};
   for (const c of Object.values(classed.fills)) counts[c] = (counts[c] || 0) + 1;
   assert.strictEqual(Object.keys(counts).length, 5, 'five classes when asked for five');
   assert.ok(Math.max(...Object.values(counts)) <= 8,
     `quantile classes stay balanced despite the outlier (got ${JSON.stringify(counts)})`);
   assert.strictEqual(classed.breaks.length, 4, 'n classes means n-1 breaks');
-  assert.strictEqual(UkrMap.scale(skewed, { steps: 3 }).breaks.length, 2, 'steps is honored');
+  assert.strictEqual(UkrMap.colorData(skewed, { steps: 3 }).breaks.length, 2, 'steps is honored');
 
   /* ties get the middle of their run, so equal values are equal colors */
-  const tied = UkrMap.scale({ a: 1, b: 5, c: 5, d: 9 });
+  const tied = UkrMap.colorData({ a: 1, b: 5, c: 5, d: 9 });
   assert.strictEqual(tied.fills.b, tied.fills.c, 'equal values, equal color');
   assert.notStrictEqual(tied.fills.a, tied.fills.d, 'unequal ones are not');
 
   /* log is the third reading: it keeps the magnitudes rank throws away, for
      the quantities that are multiplicative — densities, populations, incomes */
-  const log = UkrMap.scale(skewed, { spread: 'log' });
+  const log = UkrMap.colorData(skewed, { spread: 'log' });
   const logSpread = spread(ordinary(log.fills));
   assert.ok(logSpread > 60 && logSpread < 140,
     `log sits between linear and rank (got ${logSpread})`);
@@ -739,14 +739,14 @@ test('scale() turns numbers into colors without being told the range', () => {
   const ow = console.warn;
   console.warn = (...a) => warns.push(a.join(' '));
   let zero;
-  try { zero = UkrMap.scale({ a: 0, b: 10, c: 100 }, { spread: 'log' }); } finally { console.warn = ow; }
+  try { zero = UkrMap.colorData({ a: 0, b: 10, c: 100 }, { spread: 'log' }); } finally { console.warn = ow; }
   assert.ok(/above zero/.test(warns.join(' ')), 'log warns when it cannot be used');
   assert.ok(Object.values(zero.fills).every((c) => /^#[0-9a-f]{6}$/.test(c)),
     'and falls back to linear rather than emitting NaN');
 
   /* capping the domain is how one outlier stops eating the ramp: it clamps
      at the top and everyone else gets the room back */
-  const capped = UkrMap.scale(skewed, { spread: 'log', domain: [30, 400] });
+  const capped = UkrMap.colorData(skewed, { spread: 'log', domain: [30, 400] });
   assert.ok(spread(ordinary(capped.fills)) > spread(ordinary(log.fills)),
     'a capped domain widens the field it leaves behind');
   assert.strictEqual(capped.fills.outlier, capped.at(1), 'and the outlier clamps to the top');
@@ -755,7 +755,7 @@ test('scale() turns numbers into colors without being told the range', () => {
      mattering, which is what makes it safe to reach for */
   const mild = {};
   for (let i = 0; i < 25; i++) mild['r' + i] = 30 + i * 5;
-  const mildSpread = (opt) => spread(Object.values(UkrMap.scale(mild, opt).fills));
+  const mildSpread = (opt) => spread(Object.values(UkrMap.colorData(mild, opt).fills));
   assert.ok(Math.abs(mildSpread({ spread: 'log' }) - mildSpread({ spread: 'linear' })) < 40,
     'on evenly spread data log and linear land close together');
 
@@ -775,18 +775,18 @@ test('scale() turns numbers into colors without being told the range', () => {
   }
 
   /* the awkward inputs */
-  assert.deepStrictEqual(UkrMap.scale({}).fills, {}, 'nothing in, nothing out');
-  assert.deepStrictEqual(UkrMap.scale({ a: 5, b: null, c: 'x' }).fills, { a: '#f2ddc9' },
+  assert.deepStrictEqual(UkrMap.colorData({}).fills, {}, 'nothing in, nothing out');
+  assert.deepStrictEqual(UkrMap.colorData({ a: 5, b: null, c: 'x' }).fills, { a: '#f2ddc9' },
     'values that are not numbers are left alone rather than painted black');
-  assert.strictEqual(UkrMap.scale({ a: 1, b: 1 }).fills.a, UkrMap.scale({ a: 1, b: 1 }).fills.b,
+  assert.strictEqual(UkrMap.colorData({ a: 1, b: 1 }).fills.a, UkrMap.colorData({ a: 1, b: 1 }).fills.b,
     'a flat table is one color, not a divide by zero');
-  assert.throws(() => UkrMap.scale({ a: 1 }, { colors: ['rebeccapurple', '#000'] }), /hex colors/);
+  assert.throws(() => UkrMap.colorData({ a: 1 }, { colors: ['rebeccapurple', '#000'] }), /hex colors/);
 
   /* it composes with the rest: fills straight into render() */
   const d = load(1400);
   const dens = {};
   for (const u of UkrMap.units(d, {})) dens[u.key] = u.pop / u.area;
-  const svg = UkrMap.render(d, { fills: UkrMap.scale(dens).fills });
+  const svg = UkrMap.render(d, { fills: UkrMap.colorData(dens).fills });
   assert.ok(!/NaN|undefined/.test(svg) && (svg.match(/--c:#/g) || []).length === 25);
 });
 

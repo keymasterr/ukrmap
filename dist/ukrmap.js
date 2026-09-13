@@ -56,7 +56,7 @@
     var m = String(h).trim().replace(/^#/, '');
     if (m.length === 3) m = m[0] + m[0] + m[1] + m[1] + m[2] + m[2];
     if (!/^[0-9a-fA-F]{6}$/.test(m)) {
-      throw new Error('ukrmap: scale() takes hex colors, got "' + h + '"');
+      throw new Error('ukrmap: colorData() takes hex colors, got "' + h + '"');
     }
     return [parseInt(m.slice(0, 2), 16), parseInt(m.slice(2, 4), 16), parseInt(m.slice(4, 6), 16)];
   }
@@ -115,9 +115,9 @@
     warned[msg] = 1;
     if (typeof console !== 'undefined' && console.warn) console.warn('ukrmap: ' + msg);
   }
-  function scaleOf(values, options) {
+  function colorData(values, options) {
     var o = options || {};
-    var at = ramp(o.colors || o.colours || RAMP);
+    var at = ramp(o.colors || RAMP);
     var keys = [], nums = [], k;
     for (k in (values || {})) {
       var raw = values[k];
@@ -155,7 +155,7 @@
     }
     var mode = o.spread || (o.domain ? 'linear' : 'rank');
     if (mode === 'log' && !(lo > 0)) {
-      warnOnce('scale(): log needs every value above zero, and the smallest here is '
+      warnOnce('colorData(): log needs every value above zero, and the smallest here is '
         + lo + ' — falling back to linear');
       mode = 'linear';
     }
@@ -201,6 +201,7 @@
     return {
       fills: fills, domain: [lo, hi], breaks: breaks,
       at: at, of: of, valueAt: valueAt,
+      posOf: function (v) { return isFinite(v) ? where(v) : null; },
     };
   };
   function layerId(name) {
@@ -1261,9 +1262,8 @@
       toward: function (key, dx, dy) { return toward(data, g, nbrs, key, dx, dy); },
     };
   };
-  mount.neighbours = mount.neighbors;
   mount.project = function (data, lon, lat) { return projector(data)(lon, lat); };
-  mount.scale = scaleOf;
+  mount.colorData = colorData;
   mount.palette = function () {
     var c = {}, k;
     for (k in PALETTE) c[k] = PALETTE[k];
