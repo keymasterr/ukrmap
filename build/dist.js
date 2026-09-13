@@ -28,8 +28,12 @@ const FILES = [
   ['ua-blank.svg',     1400, { labels: 'none', water: false }, 'geometry only — color it yourself'],
   ['ua-print.svg',      700, { water: { rivers: 'all' } }, 'print detail, every river'],
   ['ua-small.svg',     2800, {}, 'coarse geometry, smallest file'],
-  ['ua-flat.svg',      1400, { style: 'attrs' }, 'colors baked on — for Figma, Keynote, Illustrator'],
-  ['ua-flat-en.svg',   1400, { style: 'attrs', lang: 'en' }, 'same, English'],
+  /* The one file whose whole job is to be opened in a design tool, so it is
+     the one file that states its own size: 1600 px, with the baked line
+     weights tuned to match. Imported, it arrives ready instead of ten
+     thousand pixels wide with everything to re-decide. */
+  ['ua-flat.svg',      1400, { style: 'attrs', width: 1600 }, 'colors baked on, 1600 px — for Figma, Keynote, Illustrator'],
+  ['ua-flat-en.svg',   1400, { style: 'attrs', lang: 'en', width: 1600 }, 'same, English'],
 ];
 
 fs.mkdirSync(DIST, { recursive: true });
@@ -167,7 +171,7 @@ const NOTES = {
   'ua-en.svg': 'the same in English',
   'ua-regions.svg': 'region names instead of centers',
   'ua-blank.svg': 'geometry only, color it yourself',
-  'ua-flat.svg': 'colors baked on — for Figma, Keynote, Illustrator',
+  'ua-flat.svg': 'colors baked on, 1600 px — for Figma, Keynote, Illustrator',
   'ua-print.svg': '700 m detail, every river',
   'ua-small.svg': 'coarsest of the three',
 };

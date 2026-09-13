@@ -274,6 +274,30 @@ test('hover shades the color a region has, instead of replacing it', () => {
     'but a click does not stick unless the host asks for it');
 });
 
+test('a baked file can state its own size, and its lines follow', () => {
+  const d = load(1400);
+  const plain = UkrMap.render(d, { style: 'attrs' });
+  const sized = UkrMap.render(d, { style: 'attrs', width: 1600 });
+  const border = (svg) => Number(svg.match(/class="ukr-borders"[^>]*stroke-width="([\d.]+)"/)[1]);
+  const tag = (svg) => svg.match(/<svg[^>]*>/)[0];
+
+  assert.ok(!/ width="/.test(tag(plain)), 'no size unless one is asked for');
+  assert.match(tag(sized), / width="1600" height="1083"/, 'the size is stated, aspect kept');
+
+  /* the whole point: the same 0.7 px on screen at whatever size is declared */
+  const px = (svg, w) => border(svg) * w / 10160;
+  assert.ok(Math.abs(px(plain, 1016) - 0.7) < 0.01, 'the default is tuned for ~1000 px');
+  assert.ok(Math.abs(px(sized, 1600) - 0.7) < 0.01, 'and width retunes it');
+  assert.ok(border(sized) < border(plain), 'a wider file needs thinner units');
+
+  /* water is cartographic, not pixel-pinned, so it must NOT be retuned */
+  const river = (svg) => (svg.match(/class="ukr-rivers"[\s\S]*?stroke-width="([\d.]+)"/) || [])[1];
+  assert.strictEqual(river(sized), river(plain), 'the Dnipro is as wide as the Dnipro');
+
+  /* inline mode has no baked widths to retune, but may still state a size */
+  assert.match(tag(UkrMap.render(d, { width: 800 })), / width="800"/, 'inline takes it too');
+});
+
 test('borders derive from the fills, but only once there are fills', () => {
   const d = load(1400);
   const plain = UkrMap.render(d, {});

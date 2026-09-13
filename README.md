@@ -15,7 +15,7 @@ A small, fast SVG map of Ukraine's 25 regions, for websites, press and statistic
 | [`ua-en.svg`](dist/ua-en.svg) | the same in English | 16.5 KB |
 | [`ua-regions.svg`](dist/ua-regions.svg) | region names instead of centers | 16.6 KB |
 | [`ua-blank.svg`](dist/ua-blank.svg) | geometry only, color it yourself | 13.3 KB |
-| [`ua-flat.svg`](dist/ua-flat.svg) | colors baked on — for Figma, Keynote, Illustrator | 17.4 KB |
+| [`ua-flat.svg`](dist/ua-flat.svg) | colors baked on, 1600 px — for Figma, Keynote, Illustrator | 17.4 KB |
 | [`ua-print.svg`](dist/ua-print.svg) | 700 m detail, every river | 33.7 KB |
 | [`ua-small.svg`](dist/ua-small.svg) | coarsest of the three | 10.1 KB |
 | [`dist/regions/`](dist/regions/) | one SVG per region + `regions.json` | 67 KB raw |
@@ -37,9 +37,9 @@ From a clone, the demo and the files are two commands: `npm run build` writes `d
 | geometry, default detail | 32.3 KB | **13.6 KB** |
 | geometry, `--detail=2800` | 20.4 KB | 8.9 KB |
 | areas + populations (separate) | 1.7 KB | 0.5 KB |
-| `dist/ukrmap.js` — the component, optional | 52.4 KB | 14.8 KB |
+| `dist/ukrmap.js` — the component, optional | 52.8 KB | 14.9 KB |
 | `dist/ukrmap-unfold.js` — opt-in on top | 10.7 KB | 3.2 KB |
-| `src/ukrmap.js` — the same code, annotated | 91.2 KB | 30.1 KB |
+| `src/ukrmap.js` — the same code, annotated | 92.8 KB | 30.7 KB |
 | emitted SVG, default | 56.1 KB | 16.8 KB |
 <!-- sizes:end -->
 
@@ -476,6 +476,15 @@ The background is transparent either way — nothing paints a sea fill.
 
 Two things are different in a baked file, both because a design tool is not a browser. **Every stroke is in map units**, including the region borders, the national outline and the seam-covering stroke: design tools ignore `vector-effect`, so a browser-sized `0.7` on a 10000-unit map imports as 0.07 px and the boundaries disappear. **Every region carries its name as its `id`**, because Figma and Illustrator name a layer after the element's id — `Львівська область`, or `Lviv Oblast` under `lang: 'en'`, instead of twenty-five layers called `Vector`.
 
+**Give a baked file a size.** Widths in map units are only right at one scale, and without `width` the file has no size of its own: Figma reads the viewBox and hands you a map ten thousand pixels wide, after which every resize is a decision about stroke weight — down one way and the borders vanish, down the other and they stay 7 px on an 800 px map. `--width` states the size and retunes the three pixel-pinned lines to match, so the file arrives ready:
+
+```bash
+npx github:keymasterr/ukrmap --style=attrs --width=1600 -o ua.svg   # a layout
+npx github:keymasterr/ukrmap --style=attrs --width=3200 -o ua.svg   # print
+```
+
+A border is 0.7 px at whatever size you name — 7 map units at 1016 px, 4.45 at 1600, 2.22 at 3200. [`dist/ua-flat.svg`](dist/ua-flat.svg) ships at 1600. Water is deliberately left out of this: those widths are cartographic — the Dnipro is as wide as the Dnipro — and they are meant to scale with the map.
+
 In Node, the same file exports the pure renderer:
 
 ```js
@@ -554,6 +563,7 @@ Shared by `render()`, `UkrMap()` and the CLI.
 | `link` | `--link` | — | wrap regions in `<a href>`, `{key}` substituted |
 | `palette` | `--palette K=V,…` | — | partial override of the default colors |
 | `scale` | `--scale` | — | `regionSvg`: pixels per 1000 map units |
+| `width` | `--width` | — | the file's own size in px; with `style: 'attrs'` the baked line weights are retuned for it |
 | `kyivSeparate` | `--kyiv-separate` | `false` | Kyiv City as its own region |
 | `sevastopolSeparate` | `--sevastopol-separate` | `false` | |
 | `titles` | `--no-titles` · `--data` | `true` | `<title>` per region → native tooltip. Also takes `{key: text}`, so the tooltip carries your value |

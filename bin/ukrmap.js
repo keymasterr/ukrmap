@@ -102,6 +102,11 @@ const HELP = `ukrmap ${UkrMap.version} — SVG map of Ukraine's regions
   --split DIR        write one SVG per region into DIR, plus regions.json.
                      Use with --scale so the shapes stay comparable.
   --scale=N          pixels per 1000 map units, for --split
+  --width=N          give the file a size of its own, in px, and with
+                     --style=attrs retune the baked line weights for it.
+                     Without it the file has no size, so a design tool reads
+                     the viewBox as 10160 px and every resize changes the
+                     weight of every line. 1600 suits a layout; 3200, print
   --pad=N            margin around the map, in map units (map is 10000 wide).
                      default 80
   --prefix=NAME      class-name prefix. default ukr
@@ -146,6 +151,7 @@ for (let i = 0; i < argv.length; i++) {
     case '--prefix': opts.prefix = val; break;
     case '--link': opts.link = val; break;
     case '--scale': opts.scale = Number(val); break;
+    case '--width': opts.width = Number(val); break;
     case '--split': split = val === null ? argv[++i] : val; break;
     case '--data': {
       const file = val === null ? argv[++i] : val;
@@ -210,6 +216,7 @@ if (opts.lang && !['uk', 'en'].includes(opts.lang)) die('--lang must be uk or en
 if (opts.style && !['inline', 'attrs', 'none'].includes(opts.style))
   die('--style must be inline, attrs or none');
 if (opts.scale !== undefined && !(opts.scale > 0)) die('--scale must be a positive number');
+if (opts.width !== undefined && !(opts.width > 0)) die('--width must be a positive number');
 if (opts.pad !== undefined && !Number.isFinite(opts.pad)) die('--pad must be a number');
 
 const file = path.join(__dirname, '..', 'data', `ua-${opts.detail}.json`);

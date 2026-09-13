@@ -36,6 +36,9 @@
                          // either way, and a sticky highlight is a second
                          // color system fighting whatever set() or a
                          // stylesheet put on that region
+    width: 0,            // px. Declares the file's own size, and in 'attrs'
+                         // mode retunes the baked line weights for it — see
+                         // the note on WF below. 0 leaves both alone
     style: 'inline',     // 'inline' — carry the default skin as CSS
                          // 'attrs'  — bake colors onto elements (design tools)
                          // 'none'   — no styling at all
@@ -122,6 +125,21 @@
      country with no internal boundaries. Same widths at 10 units per pixel, so
      the ratios stay as the browser draws them. */
   var WF = { seam: 13, border: 7, outline: 10 };
+
+  /* Those numbers are right at ONE size: ten map units to the pixel, which is
+     a 1016 px render of the default box. That is the trap in a baked file —
+     it cannot be re-sized without re-thinking its own lines, and a design tool
+     will happily scale it either way. So `width` re-tunes them: at 1600 px a
+     border is 4.4 units, which is the same 0.7 px on screen. Water is not in
+     here on purpose. Those widths are cartographic — the Dnipro is as wide as
+     the Dnipro — and they are supposed to scale with the map. */
+  function bakedWidths(vbW, width) {
+    if (!width) return WF;
+    var k = vbW / (10 * width);
+    var out = {};
+    for (var key in WF) out[key] = Math.round(WF[key] * k * 100) / 100;
+    return out;
+  }
 
   /* map units, at the standard 10000-wide map */
   var WU = { coast: 23, glow: 116, river: 32, riverMinor: 20, lake: 12 };
@@ -931,6 +949,9 @@
     var fillsGiven = false;
     for (var fk in fills) { fillsGiven = true; break; }
     var NSS = ' vector-effect="non-scaling-stroke"';
+    /* the three pixel-pinned lines, in map units, tuned for whatever size this
+       file is about to declare it is */
+    var LW = bakedWidths(data.size[0] + pad * 2, o.width);
 
     /* In attrs mode every paint is written onto the element; in inline mode
        the stylesheet does it and a per-region color is one custom property. */
@@ -946,7 +967,7 @@
          edit the result, not to read a boundary off. */
       c = c || P.land;
       if (fillsGiven) rim = darken(c, P.edge);
-      return ' fill="' + esc(c) + '" stroke="' + esc(rim) + '" stroke-width="' + WF.seam + '"'
+      return ' fill="' + esc(c) + '" stroke="' + esc(rim) + '" stroke-width="' + LW.seam + '"'
         + ' stroke-linejoin="round"';
     }
     /* `scaling` = the width is in MAP units and must scale with the map, so no
@@ -1055,12 +1076,12 @@
     }
 
     if (o.borders && e.border && !(bake && fillsGiven))
-      body += '<path class="' + p + 'borders"' + linePaint(P.line, WF.border, true) + ' d="' + e.border + '"/>';
+      body += '<path class="' + p + 'borders"' + linePaint(P.line, LW.border, true) + ' d="' + e.border + '"/>';
     if (o.outline && e.frontier)
-      body += '<path class="' + p + 'outline"' + linePaint(P.outline, WF.outline, true) + ' d="' + e.frontier + '"/>';
+      body += '<path class="' + p + 'outline"' + linePaint(P.outline, LW.outline, true) + ' d="' + e.frontier + '"/>';
     if (o.outline && e.coast)
       body += '<path class="' + p + 'coast"'
-        + linePaint(w.coast ? P.water : P.outline, w.coast ? WU.coast : WF.outline, true)
+        + linePaint(w.coast ? P.water : P.outline, w.coast ? WU.coast : LW.outline, true)
         + ' d="' + e.coast + '"/>';
 
     /* --- labels last, so nothing can paint over them --- */
@@ -1101,8 +1122,17 @@
     var vbW = data.size[0] + pad * 2;
     var vbH = data.size[1] + pad * 2;
 
+    /* A file with no size of its own is a file every tool sizes differently:
+       Figma reads the viewBox as pixels — ten thousand of them — and then
+       every resize becomes a decision about stroke weight that nobody meant
+       to make. Declaring the size is what makes the widths above mean
+       something. */
+    var dim = o.width
+      ? ' width="' + n(o.width) + '" height="' + n(Math.round(o.width * vbH / vbW)) + '"'
+      : '';
+
     return '<svg xmlns="' + NS + '" class="' + cls.join(' ') + '"'
-      + ' viewBox="' + (-pad) + ' ' + (-pad) + ' ' + n(vbW) + ' ' + n(vbH) + '"'
+      + ' viewBox="' + (-pad) + ' ' + (-pad) + ' ' + n(vbW) + ' ' + n(vbH) + '"' + dim
       + ' role="img" aria-label="'
       + esc(o.lang === 'uk' ? 'Регіони України' : 'Regions of Ukraine') + '"'
       + ' data-detail="' + data.detail + '" data-version="' + mount.version + '">'

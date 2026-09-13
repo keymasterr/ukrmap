@@ -15,6 +15,7 @@
     sevastopolSeparate: false,
     titles: true,
     select: false,
+    width: 0,
     style: 'inline',
     defs: '',
     names: null,
@@ -36,6 +37,13 @@
   };
   var W = { seam: 1.3, border: 0.7, outline: 1, halo: 24, city: 110, dot: 9 };
   var WF = { seam: 13, border: 7, outline: 10 };
+  function bakedWidths(vbW, width) {
+    if (!width) return WF;
+    var k = vbW / (10 * width);
+    var out = {};
+    for (var key in WF) out[key] = Math.round(WF[key] * k * 100) / 100;
+    return out;
+  }
   var WU = { coast: 23, glow: 116, river: 32, riverMinor: 20, lake: 12 };
   var WMIN = { coast: 1.1, glow: 4, river: 1.15, riverMinor: .8, lake: .5 };
   function wpx(p, k) {
@@ -511,13 +519,14 @@
     var fillsGiven = false;
     for (var fk in fills) { fillsGiven = true; break; }
     var NSS = ' vector-effect="non-scaling-stroke"';
+    var LW = bakedWidths(data.size[0] + pad * 2, o.width);
     function regionPaint(key) {
       var c = fills[key];
       if (!bake) return c ? ' style="--c:' + esc(c) + '"' : '';
       var rim = c || P.land;
       c = c || P.land;
       if (fillsGiven) rim = darken(c, P.edge);
-      return ' fill="' + esc(c) + '" stroke="' + esc(rim) + '" stroke-width="' + WF.seam + '"'
+      return ' fill="' + esc(c) + '" stroke="' + esc(rim) + '" stroke-width="' + LW.seam + '"'
         + ' stroke-linejoin="round"';
     }
     function linePaint(color, width, scaling) {
@@ -595,12 +604,12 @@
       body += '</g></g>';
     }
     if (o.borders && e.border && !(bake && fillsGiven))
-      body += '<path class="' + p + 'borders"' + linePaint(P.line, WF.border, true) + ' d="' + e.border + '"/>';
+      body += '<path class="' + p + 'borders"' + linePaint(P.line, LW.border, true) + ' d="' + e.border + '"/>';
     if (o.outline && e.frontier)
-      body += '<path class="' + p + 'outline"' + linePaint(P.outline, WF.outline, true) + ' d="' + e.frontier + '"/>';
+      body += '<path class="' + p + 'outline"' + linePaint(P.outline, LW.outline, true) + ' d="' + e.frontier + '"/>';
     if (o.outline && e.coast)
       body += '<path class="' + p + 'coast"'
-        + linePaint(w.coast ? P.water : P.outline, w.coast ? WU.coast : WF.outline, true)
+        + linePaint(w.coast ? P.water : P.outline, w.coast ? WU.coast : LW.outline, true)
         + ' d="' + e.coast + '"/>';
     if (wantCity || wantName) {
       var owner = {};
@@ -633,8 +642,11 @@
     }
     var vbW = data.size[0] + pad * 2;
     var vbH = data.size[1] + pad * 2;
+    var dim = o.width
+      ? ' width="' + n(o.width) + '" height="' + n(Math.round(o.width * vbH / vbW)) + '"'
+      : '';
     return '<svg xmlns="' + NS + '" class="' + cls.join(' ') + '"'
-      + ' viewBox="' + (-pad) + ' ' + (-pad) + ' ' + n(vbW) + ' ' + n(vbH) + '"'
+      + ' viewBox="' + (-pad) + ' ' + (-pad) + ' ' + n(vbW) + ' ' + n(vbH) + '"' + dim
       + ' role="img" aria-label="'
       + esc(o.lang === 'uk' ? 'Регіони України' : 'Regions of Ukraine') + '"'
       + ' data-detail="' + data.detail + '" data-version="' + mount.version + '">'
